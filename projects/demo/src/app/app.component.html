@@ -11,7 +11,7 @@
   <ng-template #error>Error!</ng-template>
 
   <ui-minimal-push
-    *axLazyElement="'http://localhost:4242/elements/main.js'; loadingTemplate: loading; errorTemplate: error"
+    *axLazyElement="'elements/main.js'; loadingTemplate: loading; errorTemplate: error"
     [value]="primitive" (update)="log($event)">
   </ui-minimal-push>
   <!-- -->

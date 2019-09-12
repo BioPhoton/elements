@@ -12,11 +12,11 @@ export class AppComponent implements AfterViewInit {
   o = {primitive: this.primitive};
   o$ = new BehaviorSubject(this.o);
 
-  constructor(private el: ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
   ngAfterViewInit(): void {
-    // this.el.nativeElement.querySelector('ui-minimal')
+    // this.elementRef.nativeElement.querySelector('ui-minimal')
     //  .setAttribute('value', this.object);
   }
 
