@@ -1,0 +1,10 @@
+{
+  "/elements": {
+    "target": "http://localhost:4300",
+    "secure": false,
+    "pathRewrite": {
+      "^/elements": ""
+    },
+    "logLevel": "debug"
+  }
+}
