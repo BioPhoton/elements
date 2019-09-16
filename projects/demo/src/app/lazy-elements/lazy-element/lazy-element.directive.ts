@@ -27,7 +27,7 @@ export class LazyElementDirective implements OnInit {
   }
 
   ngOnInit() {
-    // @TODO Get tag name programatically
+    // @TODO Get tag name programmatically
     const elementTag = 'web-component'; // (this.template as any)._def.element.template.nodes[0].element.name;
 
     if (this.loadingTemplateRef) {
