@@ -1,12 +1,10 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ApplicationRef, DoBootstrap, Injector, NgModule} from '@angular/core';
-import {MinimalWebComponent} from './minimal/minimal.component';
 import {createCustomElement} from '@angular/elements';
-import {MinimalPushWebComponent} from './minimal/minimal-push.component';
+import {WebComponent} from './web.component';
 
 export const elements: any[] = [
-  [MinimalWebComponent, 'ui-minimal'],
-  [MinimalPushWebComponent, 'ui-minimal-push']
+  [WebComponent, 'web-component']
 ];
 export const DECLARATIONS = elements.map(a => a[0]);
 
@@ -26,9 +24,6 @@ export class AppModule implements DoBootstrap {
       const el = createCustomElement(componentClass, {injector: this.injector});
       customElements.define(selector, el);
     });
-    console.log('elements bootstrapped!');
   }
 
 }
-
-console.log('elements loaded!');

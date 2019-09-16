@@ -1,22 +1,29 @@
-import { DoBootstrap, Injector, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
+import {ApplicationRef, DoBootstrap, Injector, NgModule} from '@angular/core';
+import {createCustomElement} from '@angular/elements';
+import {WebComponent} from './web.component';
 
-import { WebComponent } from './web.component';
-import { createCustomElement } from '@angular/elements';
+export const elements: any[] = [
+  [WebComponent, 'web-component']
+];
+export const DECLARATIONS = elements.map(a => a[0]);
 
 @NgModule({
+  declarations: [DECLARATIONS],
   imports: [BrowserModule],
-  declarations: [WebComponent],
-  entryComponents: [WebComponent]
+  entryComponents: [DECLARATIONS]
 })
 export class AppModule implements DoBootstrap {
 
   constructor(private injector: Injector) {
+
   }
 
-  ngDoBootstrap() {
-    const GithubReposElement = createCustomElement(WebComponent, { injector: this.injector });
-    customElements.define('web-component', GithubReposElement);
+  ngDoBootstrap(appRef: ApplicationRef): void {
+    elements.forEach(([componentClass, selector]) => {
+      const el = createCustomElement(componentClass, {injector: this.injector});
+      customElements.define(selector, el);
+    });
   }
 
 }

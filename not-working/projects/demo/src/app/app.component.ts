@@ -3,21 +3,25 @@ import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  template: `
+      primitive: <input [(ngModel)]="primitive"><br/>
+      <button (click)="increment()">trigger immutable change</button>
+      <ng-template #loading>Loading...</ng-template>
+      <ng-template #error>Error!</ng-template>
+
+      <web-component
+              *axLazyElement="'elements/main.js'; loadingTemplate: loading; errorTemplate: error"
+              [value]="primitive" (update)="log($event)">
+      </web-component>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   primitive = 42;
   o = {primitive: this.primitive};
   o$ = new BehaviorSubject(this.o);
 
-  constructor(private elementRef: ElementRef) {
-  }
-
-  ngAfterViewInit(): void {
-    // this.elementRef.nativeElement.querySelector('ui-minimal')
-    //  .setAttribute('value', this.object);
+  constructor() {
   }
 
   increment() {
