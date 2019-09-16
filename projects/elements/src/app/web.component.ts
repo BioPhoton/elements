@@ -4,11 +4,11 @@ import {Subject} from 'rxjs';
 @Component({
   template: `
       <h1>WebComponent.</h1>
-      <p>@Input() value: {{value | json}}</p>
-        <button (click)="update.next(value)">trigger output</button>
+      <p>@Input() value: {{value}}</p>
+      <button (click)="update.next(value)">trigger output</button>
   `,
   // Change to .OnPush to see CD not working
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WebComponent {
   @Input() value: string;

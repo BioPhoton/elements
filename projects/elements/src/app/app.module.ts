@@ -9,9 +9,9 @@ export const elements: any[] = [
 export const DECLARATIONS = elements.map(a => a[0]);
 
 @NgModule({
-  declarations: [DECLARATIONS],
+  declarations: [WebComponent],
   imports: [BrowserModule],
-  entryComponents: [DECLARATIONS]
+  entryComponents: [WebComponent]
 })
 export class AppModule implements DoBootstrap {
 

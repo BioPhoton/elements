@@ -4,15 +4,8 @@ import {BehaviorSubject} from 'rxjs';
 @Component({
   selector: 'app-root',
   template: `
-      Primitive:: <input [(ngModel)]="primitive"><br/>
-      <button (click)="changeValueImmutable()">trigger immutable change</button>
-
-      <ng-template #loading>Loading...</ng-template>
-      <ng-template #error>Error!</ng-template>
-
-      <!-- Replace [value]="primitive" with [value]="o" to use an object instead of primitive value-->
       <web-component
-              *axLazyElement="'elements/main.js'; loadingTemplate: loading; errorTemplate: error"
+              *axLazyElement="'elements/main.js'"
               [value]="primitive" (update)="log($event)">
       </web-component>
   `

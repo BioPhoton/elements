@@ -16,8 +16,35 @@
   }
 }
 ```
-7. `npm i -D npm-run-all`
-8. add following lines to the scripts section in your `package.json` located in root level
+7. Add `proxy.config.json` to `angular.json` under demo projects serve options:
+```json
+{
+  ...
+  "projects": {
+    ...
+    "demo": {
+      ...
+      "architect": {
+        ...
+        "serve": {
+           ...
+           "options": {
+              ...
+              "proxyConfig": "proxy.conf.json"
+            },
+          ...
+        },  
+        ...
+      },
+      ...   
+    },
+    ...
+  },
+  ...
+}
+```
+8. `npm i -D npm-run-all`
+9. add following lines to the scripts section in your `package.json` located in root level
 ```json
 {
   ...
@@ -30,9 +57,9 @@
   ...
 }
 ```
-9. `npm i -S @angular-extensions/elements`
-10. Delete files `projects/demo/src/app` folder
-11. Create `app.component.ts` into `projects/demo/src/app` folder and insert following content:
+10. `npm i -S @angular-extensions/elements`
+11. Delete files `projects/demo/src/app` folder
+12. Create `app.component.ts` into `projects/demo/src/app` folder and insert following content:
 ```typescript
 import { Component } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
@@ -72,7 +99,7 @@ export class AppComponent {
   }
 }
 ```
-12. Create `app.module.ts` into `projects/demo/src/app` folder and insert following content:
+13. Create `app.module.ts` into `projects/demo/src/app` folder and insert following content:
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
@@ -96,8 +123,8 @@ import {LazyElementsModule} from '@angular-extensions/elements';
 })
 export class AppModule { }
 ```
-13. Delete files `projects/demo/src/app` folder
-14. Create `web.component.ts` into `projects/elements/src/app` folder and insert following content:
+14. Delete files `projects/demo/src/app` folder
+15. Create `web.component.ts` into `projects/elements/src/app` folder and insert following content:
 ```typescript
 import {ChangeDetectionStrategy, Component, Input, Output} from '@angular/core';
 import {Subject} from 'rxjs';
@@ -116,7 +143,7 @@ export class WebComponent {
   @Output() update = new Subject();
 }
 ```
-15. Create `app.module.ts` into `projects/elements/src/app` folder and insert following content:
+16. Create `app.module.ts` into `projects/elements/src/app` folder and insert following content:
 ```typescript
 import {BrowserModule} from '@angular/platform-browser';
 import {ApplicationRef, DoBootstrap, Injector, NgModule} from '@angular/core';
@@ -148,4 +175,4 @@ export class AppModule implements DoBootstrap {
 
 }
 ```
-16. `npm start`
+17. `npm start`
