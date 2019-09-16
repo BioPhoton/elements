@@ -8,5 +8,12 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+const ngZone = (window as any).ngZone;
+let compilerOptions = {};
+if (ngZone) {
+  compilerOptions = {ngZone};
+}
+
+console.log('compilerOptions for elements:', compilerOptions);
+platformBrowserDynamic().bootstrapModule(AppModule, compilerOptions)
   .catch(err => console.error(err));

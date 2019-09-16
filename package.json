@@ -8,8 +8,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "rename:element": "node tooling/build-script.js",
-    "build:element": "ng build --project elements --single-bundle && npm run rename:element",
     "serve:element": "ng serve --project elements --single-bundle --port 4242",
     "serve:demo": "ng serve --project demo --port 4221"
   },
