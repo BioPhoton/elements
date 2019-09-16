@@ -1,8 +1,7 @@
 {
   "/elements": {
-    "target": "http://localhost:4242",
+    "target": "http://localhost:4300",
     "secure": false,
-    "changeOrigin": true,
     "pathRewrite": {
       "^/elements": ""
     },

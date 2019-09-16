@@ -3,7 +3,7 @@ import {Subject} from 'rxjs';
 
 @Component({
   template: `
-      <h1>WebComponent</h1>
+      <h1>WebComponent.</h1>
       <p>@Input() value: {{value | json}}</p>
         <button (click)="update.next(value)">trigger output</button>
   `,

@@ -22,7 +22,7 @@
             "main": "projects/demo/src/main.ts",
             "polyfills": "projects/demo/src/polyfills.ts",
             "tsConfig": "projects/demo/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets"
@@ -49,7 +49,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -71,8 +70,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo:build",
-            "proxyConfig": "proxy.conf.json"
+            "browserTarget": "demo:build"
           },
           "configurations": {
             "production": {
@@ -149,7 +147,7 @@
             "main": "projects/elements/src/main.ts",
             "polyfills": "projects/elements/src/polyfills.ts",
             "tsConfig": "projects/elements/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/elements/src/favicon.ico",
               "projects/elements/src/assets"
@@ -172,7 +170,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,

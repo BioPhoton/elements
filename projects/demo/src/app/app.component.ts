@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import { Component } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-root',
   template: `
-      Primitive: <input [(ngModel)]="primitive"><br/>
+      Primitive:: <input [(ngModel)]="primitive"><br/>
       <button (click)="changeValueImmutable()">trigger immutable change</button>
 
       <ng-template #loading>Loading...</ng-template>
@@ -34,5 +34,4 @@ export class AppComponent {
   log(v) {
     console.log(v);
   }
-
 }
