@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 
 @Component({
-  selector: 'demo-root',
+  selector: 'app-root',
   template: `
       <div class="wrapper">
           <div style="width: 400px">
@@ -19,15 +19,7 @@ import {BehaviorSubject} from "rxjs";
           </div>
       </div>
   `,
-  styles: [`
-      .wrapper {
-          display: flex;
-      }
-
-      .wrapper > div {
-          padding: 20px;
-      }
-  `]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   primitive = 'Testt';
