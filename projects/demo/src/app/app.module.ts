@@ -1,7 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule, NgZone} from '@angular/core';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {FormsModule} from '@angular/forms';
 import {LazyElementsModule} from './lazy-elements/lazy-elements.module';
 
@@ -18,4 +18,8 @@ import {LazyElementsModule} from './lazy-elements/lazy-elements.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private ngZone: NgZone) {
+    (window as any).ngZone = this.ngZone;
+  }
+}

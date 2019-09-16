@@ -8,7 +8,7 @@ import {Subject} from 'rxjs';
       <button (click)="update.next(value)">trigger output</button>
   `,
   // Change to .OnPush to see CD not working
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WebComponent {
   @Input() value: string;
