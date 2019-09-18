@@ -65,6 +65,16 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "withElements": {
+              "scripts": [
+                "dist/elements/elements.js"
+              ]
+            },
+            "withElementsZoneLess": {
+              "scripts": [
+                "dist/elements-zone-less/elements.js"
+              ]
             }
           }
         },
@@ -77,6 +87,12 @@
           "configurations": {
             "production": {
               "browserTarget": "demo:build:production"
+            },
+            "withElements": {
+              "browserTarget": "demo:build:withElements"
+            },
+            "withElementsZoneLess": {
+              "browserTarget": "demo:build:withElementsZoneLess"
             }
           }
         },
@@ -188,6 +204,9 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "zoneLess": {
+              "polyfills": "projects/elements/src/polyfills-zone-less.ts"
             }
           }
         },
@@ -199,6 +218,9 @@
           "configurations": {
             "production": {
               "browserTarget": "elements:build:production"
+            },
+            "zoneLess": {
+              "browserTarget": "elements:build:zoneLess"
             }
           }
         },

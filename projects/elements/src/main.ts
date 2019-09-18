@@ -8,12 +8,15 @@ if (environment.production) {
   enableProdMode();
 }
 
-const ngZone = (window as any).ngZone;
-let compilerOptions = {};
-if (ngZone) {
-  compilerOptions = {ngZone};
-}
-
-console.log('compilerOptions for elements:', compilerOptions);
-platformBrowserDynamic().bootstrapModule(AppModule, compilerOptions)
+platformBrowserDynamic().bootstrapModule(AppModule, getCompilerOptions())
   .catch(err => console.error(err));
+
+function getCompilerOptions() {
+  const ngZone = (window as any).ngZone;
+  let compilerOptions = {};
+  if (ngZone) {
+    compilerOptions = {ngZone};
+  }
+  console.log('getCompilerOptions', compilerOptions);
+  return compilerOptions
+}
