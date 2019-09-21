@@ -1,0 +1,15 @@
+.app-container {
+  margin: 0 auto;
+  padding: 30px;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+}
+
+.pagination button {
+  float: right;
+}

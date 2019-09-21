@@ -13,8 +13,10 @@ platformBrowserDynamic().bootstrapModule(AppModule, getCompilerOptions())
 
 function getCompilerOptions() {
   const ngZone = (window as any).ngZone;
+  let compilerOptions = {};
   if (ngZone) {
-    return {ngZone};
+    compilerOptions = {ngZone};
   }
-  return {};
+  console.log('getCompilerOptions', compilerOptions);
+  return compilerOptions
 }

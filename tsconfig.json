@@ -24,6 +24,12 @@
       ],
       "demo/*": [
         "dist/demo/*"
+      ],
+      "helpers": [
+        "dist/helpers"
+      ],
+      "helpers/*": [
+        "dist/helpers/*"
       ]
     }
   },
