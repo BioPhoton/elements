@@ -25,7 +25,8 @@
     "serve:demo": "ng serve --project demo",
     "serve:demo:zone-less": "ng serve --project demo -c=zoneLess",
     "serve:demo:with-elements": "ng serve --project demo -c=withElements",
-    "serve:demo:with-elements:zone-less": "ng serve --project demo -c=withElementsZoneLess"
+    "serve:demo:with-elements:zone-less": "ng serve --project demo -c=withElementsZoneLess",
+    "readme:gen-toc": "markdown-toc ../README.md -i"
   },
   "private": true,
   "dependencies": {
