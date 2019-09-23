@@ -1,11 +1,12 @@
 import {Component, Input, Output, ViewEncapsulation} from '@angular/core';
 import {BehaviorSubject, pipe, Subject} from 'rxjs';
 import {map, scan, shareReplay, startWith, tap} from 'rxjs/operators';
+import {environment} from "../../environments/environment";
 
 @Component({
   templateUrl: './ui-overview.component.html',
   styleUrls: ['./ui-overview.component.scss'],
-  encapsulation: ViewEncapsulation.Emulated,
+  encapsulation: environment.encapsulation,
 })
 export class UiOverviewComponent {
   swallowEvent = pipe(
@@ -41,21 +42,25 @@ export class UiOverviewComponent {
     );
   expandedElement: any | null;
 
-  private schadenUebersicht$ = new BehaviorSubject<any[]>([]);
+  schadenUebersicht$ = new BehaviorSubject<any[]>([]);
 
   @Input()
-  set schadenUebersicht(data: any) {
-    this.schadenUebersicht$.next(data);
+  set schadenUebersicht(data: any[]) {
+    if (Array.isArray(data)) {
+      this.schadenUebersicht$.next(data);
+    }
   }
 
-  private schadenEntwurf$ = new BehaviorSubject<any[]>([]);
+  schadenEntwurf$ = new BehaviorSubject<any[]>([]);
 
   @Input()
-  set schadenEntwurf(data: any) {
-    this.schadenEntwurf$.next(data);
+  set schadenEntwurf(data: any[]) {
+    if (Array.isArray(data)) {
+      this.schadenEntwurf$.next(data);
+    }
   }
 
-  private isLoading$ = new BehaviorSubject(true);
+  isLoading$ = new BehaviorSubject(false);
 
   @Input()
   set isLoading(isLoading: boolean) {

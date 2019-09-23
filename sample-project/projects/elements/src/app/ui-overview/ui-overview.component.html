@@ -1,10 +1,11 @@
-<div class="ui-overview-container"
-     *ngIf="isLoading$ | async; else table">
-  <mat-spinner></mat-spinner>
-</div>
+<div class="ui-overview-container">
 
-<ng-template #table>
-  <div class="ui-overview-container">
+<ng-template #spinner [ngIf]="isLoading$ | async">
+  <mat-spinner></mat-spinner>
+</ng-template>
+
+  <ng-template #table
+             [ngIf]="!(isLoading$ | async) && (schadenUebersicht$ | async)?.length && (schadenEntwurf$ | async)?.length">
     <mat-tab-group>
       <mat-tab label="Schäden">
         <table
@@ -185,5 +186,10 @@
       <input type="checkbox" id="checkbox-1" (change)="toggleArge.next(!isARGE)" [checked]="toggleArge | async"/>
       <label for="checkbox-1">alle Schäden der ARGE</label>
     </div>
-  </div>
 </ng-template>
+
+<ng-template #noData [ngIf]="!(isLoading$ | async) && !(schadenUebersicht$ | async)?.length && !(schadenEntwurf$ | async)?.length">
+  <mat-card>No data!</mat-card>
+</ng-template>
+
+</div>

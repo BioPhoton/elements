@@ -1,46 +1,24 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output} from '@angular/core';
-import {interval, Observable, ReplaySubject, Subject} from 'rxjs';
-import {tap} from "rxjs/operators";
+import {ChangeDetectionStrategy, Component, Input, Output, ViewEncapsulation} from '@angular/core';
+import {Subject} from 'rxjs';
+import {environment} from "../environments/environment";
 
 @Component({
   template: `
-      <h1>MatWebComponent</h1>
-      <p>@Input() value: {{value$ | async | json}}</p>
-      <p>interval:  {{i$ | async}}</p>
+      <h1 id="mat-web-component-h1">MatWebComponent</h1>
+      <p>@Input() value: {{value | json}}</p>
       <br/>
       <mat-form-field>
           <input matInput
                  placeholder="Favorite food"
-                 [value]="value$ | async"
-                 (focus)="cd$.next()"
-                 (blur)="cd$.next()"
+                 [value]="value"
                  (input)="event.next($event)">
       </mat-form-field>
   `,
-  // @NOTICE Change to .OnPush only works with reactive architecture atm
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styles: [ `h1 { color:deepskyblue }` ],
+  encapsulation: environment.encapsulation,
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class MatWebComponent {
-  // CD helper
-  // @TODO create rx pipe and a directive for changeDetection
-  detectChanges = <T>(o$: Observable<T>): Observable<T> => o$
-    .pipe(tap(() => this.cd.detectChanges()));
-  cd$ = new Subject();
-
-  // =========================================
-
-  i$ = interval(500).pipe(this.detectChanges);
-
-  value$ = new ReplaySubject<string>(1);
-  @Input() set value(v: string | {primitive: any}) {
-    this.value$.next((v as {primitive: any}).primitive);
-  };
-
+  @Input() value = '';
   @Output() event = new Subject();
-
-  constructor(private cd: ChangeDetectorRef) {
-    // trigger change detection as side effect for every next value
-    this.cd$.pipe(this.detectChanges).subscribe()
-  }
-
 }

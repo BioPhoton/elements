@@ -33,11 +33,16 @@
     + [Setup Zone-Less Build and Serve Scripts](#setup-zone-less-build-and-serve-scripts)
     + [Setup Un-Compiled Build and Serve Scripts](#setup-un-compiled-build-and-serve-scripts)
     + [Setup Stand Alone Project as well as Build and Serve Scripts](#setup-stand-alone-project-as-well-as-build-and-serve-scripts)
-- [Loading strategies](#loading-strategies)
+- [Styling Strategies](#styling-strategies)
+  * [View Encapsulation with Option `None`](#view-encapsulation-with-option-none)
+  * [View Encapsulation with Option `ShadowDom`](#view-encapsulation-with-option-shadowdom)
+  * [View Encapsulation with Option `Emulated`](#view-encapsulation-with-option-emulated)
+  * [Setup Build and Serve Scripts for the Different Styling Strategies](#setup-build-and-serve-scripts-for-the-different-styling-strategies)
+- [Loading Strategies](#loading-strategies)
   * [Elements Bundled with App](#elements-bundled-with-app)
   * [Elements Pre-compiled Lazy Loaded](#elements-pre-compiled-lazy-loaded)
   * [Elements Un-compiled Lazy Loaded](#elements-un-compiled-lazy-loaded)
-- [Productivity Helpers PoC's](#productivity-helpers-pocs)
+- [Productivity Helpers](#productivity-helpers-pocs)
   * [Push Pipe](#push-pipe)
   * [Let Structural Directive](#let-structural-directive)
   * [CdOn Directive](#cdon-directive)
@@ -45,13 +50,14 @@
 
 <!-- tocstop -->
 
-In this PoC the goal is to wrap `@angular/material` components 
+In this documnet the goal is to wrap `@angular/material` components 
 created over `@ng-dynamic-forms/core` and use it in another angular application.
 
 Following things should be included:
 - [x] **Setup and Build** (A detailed documentation on how to setup things)
 - [x] **Working ChangeDetection** (ChangeDetection should work for all features. If possible zone-less)
 - [x] **Developer Workflow** (A convenient developer workflow for serving and building)
+- [x] **Styling Strategies** (Builds for all different variants of style encapsulation) 
 - [x] **Loading strategies** (Loading of web components)
 - [ ] **Productivity Helpers** (A general set of helpers for more convenience)    
 
@@ -145,6 +151,34 @@ Chrome | 76.0.3809.132
       },
       ...   
     },
+    "elements": {
+      "architect": {
+          ...
+          "build": {
+             ...
+             "options": {
+             ...
+             "singleBundle": true,
+             "bundleStyles": false,
+             "keepPolyfills": true
+             },
+            ...
+          },
+          "serve": {
+            ...
+            "options": {
+              ...
+              "singleBundle": true,
+              "bundleStyles": false,
+              "keepPolyfills": true,
+              "port": 4242
+            },
+            ...
+            },
+          ...
+        },
+        ...   
+      },
     ...
   },
   ...
@@ -159,7 +193,7 @@ Chrome | 76.0.3809.132
     ...
     "start": "npm-run-all --parallel serve:demo serve:elements",
     "serve:demo": "ng serve --project demo",
-    "serve:elements": "ng serve --project elements --single-bundle  --keep-polyfills --port 4300"
+    "serve:elements": "ng serve --project elements --port 4300"
   },
   ...
 }
@@ -312,12 +346,14 @@ export class WebComponent {
 import {BrowserModule} from '@angular/platform-browser';
 import {DoBootstrap, Injector, NgModule} from '@angular/core';
 import {createCustomElement} from '@angular/elements';
-import {WebComponent} from './web.component';
+import {WebComponent} from './dynamic-form.component';
 
 export const ANGUlAR_ELEMENTS: any[] = [
-  [WebComponent, 'web-component']
+  [WebComponent, 'web-component'],
+  [MatWebComponent, 'mat-web-component']
+  [DynamicFormComponent, 'dynamic-form-component']
 ];
-export const DECLARATIONS = ANGUlAR_ELEMENTS.map(a => a[0]);
+export const DECLARATIONS = [WebComponent, MatWebComponent, DynamicFormWebComponent];
 
 @NgModule({
   declarations: [DECLARATIONS],
@@ -1041,8 +1077,8 @@ function getCompilerOptions() {
 
 ### Development
 
-After following the setup from above we only need `npm start` to run both: 
-- Serving the element (we serve the element with the --singleBundle flag enables)
+After implementing the setup from above we only need `npm start` to run both: 
+- Serving the element (we serve the element with the new changes in the build options)
 - And serving the application (we use default cli commands)
 
 Over a proxy config we redirect requests for the elements to the first served angular project.
@@ -1079,22 +1115,39 @@ insert following code:
 const fs = require('fs-extra');
 const concat = require('concat');
 
-(async function build() {
+Promise.all([
+  // Zone-Full Bundling
+  // es2015
+  bundleZoneFullEs2015()
+])
+  .then(() => {
+    console.log('Bundeled elements success-fully');
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
-    // Zone-Full Bundling
+// ===========  
 
-    // es2015
-    await fs.ensureDir('./dist/elements');
-    await concat([
-      './dist/elements/main-es2015.js',
-      './dist/elements/polyfills-es2015.js'
-    ], './dist/elements/elements.js', function(err) {
-      if ( err ) console.log('ERROR: ' + err);
+// Zone-Full Bundling
+
+// es2015
+
+function bundleZoneFullEs2015() {
+  return fs.ensureDir('./dist/elements')
+    .then(() => {
+      return concat([
+      './dist/elements/polyfills-es2015.js',
+       './dist/elements/styles-es2015.js',
+       './dist/elements/main-es2015.js'
+      ], './dist/elements/elements.js');
+    })
+    .catch(err => {
+      console.error('Error while bundling elements check if you build it already');
     });
-
-
-})();
+}
 ```
+
 3. Add a new scripts entry to `package.json` in the root folder to use your new configuration.
    ```json
    {
@@ -1104,7 +1157,7 @@ const concat = require('concat');
        "build:all:bundled": "npm-run-all --sequential build:all generate:bundles",
        "build:all": "npm-run-all --parallel build:elements",
        "generate:bundles": "node tooling/elements-bundling.js",
-       "build:elements": "ng build --project elements --single-bundle --keep-polyfills",
+       "build:elements": "ng build --project elements",
        "build:demo": "ng build",
        ...
      },
@@ -1151,6 +1204,7 @@ Therefore we can setup a build and serve script that excludes `zone.js` from our
           "configurations": {
             ... !!! CHANGES HERE !!!
             "zoneLess": {
+              "outputPath": "dist/elements-zone-less",
               "browserTarget": "elements:build:zoneLess"
             }
           }
@@ -1172,31 +1226,49 @@ Therefore we can setup a build and serve script that excludes `zone.js` from our
     "serve:all:elements-zone-less": "npm-run-all --parallel serve:demo:zone-less serve:elements:zone-less",
                                                                             ... !!! CHANGES HERE !!!
     "serve:all:demo-zone-less": "npm-run-all --parallel serve:demo:zone-less serve:elements:zone-less",
-    "build:elements:zone-less": "ng build --project elements --single-bundle --keep-polyfills --output-path dist/elements-zone-less -c=zoneLess",
-    "serve:elements:zone-less": "ng serve --project elements --single-bundle --keep-polyfills --port 4242 -c=zoneLess",
+    "build:elements:zone-less": "ng build --project elements -c=zoneLess",
+    "serve:elements:zone-less": "ng serve --project elements -c=zoneLess --port 4242",
     ...
   },
   ...
 }
 ``` 
 As a last piece let's complete the build scripts for zone-less elements: 
-
+ 
 6. Add following to `element-bundling.js` located in `tooling`:
 ```javascript
 ...
+Promise.all([
+  ... !!! CHANGES HERE !!!
+  // Zone-Less Bundling
+  // es2015
+  bundleZoneLessEs2015()
+ ])
 
-(async function build() {
-  ...
-  // !!! CHANGES HERE !!!
-  await fs.ensureDir('./dist/elements-zone-less');
-  await concat(['./dist/elements-zone-less/main-es2015.js'], './dist/elements-zone-less/elements.js', function(err) {
-    if ( err ) console.log('ERROR: ' + err);
-  });
+...
 
-})();
+... !!! CHANGES HERE !!!
+// Zone-Less Bundling
+
+// es2015
+function bundleZoneLessEs2015() {
+  return fs.ensureDir('./dist/elements-zone-less')
+    .then(() => {
+      return concat([
+               './dist/elements/styles-es2015.js',
+               './dist/elements/main-es2015.js'
+      ], './dist/elements-zone-less/elements.js')
+    }).catch(err => {
+      console.error('Error while bundling elements-zone-less check if you build it already');
+    });
+}
+
 
 ```
 
+**NOTE:**  
+At the time of writing `ngx-build-plus` didn't have proper options to create a single bundle so we had to implement a custom build step.
+The related issue is [#30](https://github.com/manfredsteyer/ngx-build-plus/issues/130)
 7. `npm run serve:all:demo-zone-less` or `npm run serve:all:elements-zone-less`
 
 That's it! :)
@@ -1229,27 +1301,135 @@ Let's setup a project to the the stan alone version of the web components.
 As we already have a serve script for our `elements` project in the right setup let's start to implement the development setup with serve scripts first.  
 
 1. Create a new folder in the `projects` folder called `demo-stand-alone`.
-2. Create a `index.dev.html` file in `projects/demo-stand-alone` and insert following content:
-```typescript
+2. Create a file `scripts.js` and insert following content: 
+```javascript
+
+// WebComponents
+
+const webComponent = document.getElementsByTagName('web-component')[0];
+const matWebComponent = document.getElementsByTagName('mat-web-component')[0];
+const dynamicFormComponent = document.getElementsByTagName('dynamic-form-component')[0];
+
+// Inputs
+const btnSetAttribute = document.getElementById('setAttribute');
+btnSetAttribute.addEventListener('click', () => {
+  setAttribute();
+});
+
+const btnSetProperty = document.getElementById('setProperty');
+btnSetProperty.addEventListener('click', () => {
+  setProperty();
+});
+
+dynamicFormComponent.formModel = getJsonModel();
+
+// Outputs
+
+webComponent.addEventListener('update', (customEvent) => {
+  render(customEvent.detail);
+});
+
+matWebComponent.addEventListener('event', (customEvent) => {
+  render(customEvent.detail.target.value);
+});
+
+dynamicFormComponent.addEventListener('change', (customEvent) => {
+  console.log('change', customEvent);
+  render(customEvent.detail.group.value);
+});
+
+
+// === Helper
+
+function setAttribute() {
+  webComponent.setAttribute('value', 'setAttribute' + Math.random());
+  matWebComponent.setAttribute('value', 'setAttribute' + Math.random());
+}
+
+
+function setProperty() {
+  webComponent.value = 'setProperty' + Math.random();
+  matWebComponent.value = 'setProperty' + Math.random();
+}
+
+function render(customEvent) {
+  const viewUpdate = document.getElementById('update');
+  viewUpdate.innerHTML = JSON.stringify(customEvent);
+}
+
+function getJsonModel() {
+  return [
+    {
+      "type": "INPUT",
+      "id": "sampleInput",
+      "label": "Sample Input",
+      "maxLength": 42,
+      "placeholder": "Sample input"
+    },
+    {
+      "type": "RADIO_GROUP",
+      "id": "sampleRadioGroup",
+      "label": "Sample Radio Group",
+      "options": [
+        {
+          "label": "Option 1",
+          "value": "option-1",
+        },
+        {
+          "label": "Option 2",
+          "value": "option-2"
+        },
+        {
+          "label": "Option 3",
+          "value": "option-3"
+        }
+      ],
+      "value": "option-3"
+    },
+    {
+      "type": "CHECKBOX",
+      "id": "sampleCheckbox",
+      "label": "I do agree"
+    }
+  ];
+}
+
+```
+
+3. Create a `index.dev.html` file in `projects/demo-stand-alone` and insert following content:
+```html
 <!DOCTYPE html>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
 </head>
 <body>
 
-<h2>WebComponent should render below</h2>
+<h1>WebComponent ng serve</h1>
 
-<!-- Here is our web component -->
+<button id="setAttribute">webComponent.setAttribute('value', 'test)</button>
+<br>
+<button id="setProperty">webComponent.value = 'test</button>
+<br>
+Update: <code id="update">No Update Happened Yet</code>
 <web-component></web-component>
+<hr>
+<mat-web-component></mat-web-component>
+<hr>
+<dynamic-form-component></dynamic-form-component>
+<!-- Here is our web component -->
 
 <script type="text/javascript" src="elements/polyfills.js"></script>
+<script type="text/javascript" src="elements/styles.js"></script>
 <script type="text/javascript" src="elements/main.js"></script>
+
+<script type="text/javascript" src="scripts.js"></script>
 </body>
 </html>
 ```
-3. `npm i live server -D`
-4. Add new script entries to `package.json` in the root folder to serve your new project.
+4. `npm i live server -D`
+5. Add new script entries to `package.json` in the root folder to serve your new project.
 ```json
 {
   ...
@@ -1263,32 +1443,54 @@ As we already have a serve script for our `elements` project in the right setup 
 }
 ``` 
 
-5. Test your setup with `npm run serve:all:demo-stand-alone:hot-elements`.
+6. Test your setup with `npm run serve:all:demo-stand-alone:hot-elements`.
 
 Note as out build process takes way longer than serving a simple html file we may wait a bit and hit refresh in the browser after the `elements` projects file is served by the Angular CLI.
 Then we should see a working result.
 
 Now finally let's test a bundled version of the elements. 
 
-1. Create a `index.html` file in `projects/demo-stand-alone` and insert following content:
-```typescript
+7. Create a `index.html` file in `projects/demo-stand-alone` and insert following content:
+```html
 <!DOCTYPE html>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
 </head>
 <body>
 
-<h2>WebComponent should render below</h2>
+<h1>WebComponent Final-Bundle</h1>
 
-<!-- Here is our web component -->
+<button id="setAttribute">webComponent.setAttribute('value', 'test)</button>
+<br>
+<button id="setProperty">webComponent.value = 'test</button>
+<br>
+Update: <code id="update">No Update Happened Yet</code>
 <web-component></web-component>
+<hr>
+<mat-web-component></mat-web-component>
+<hr>
+<dynamic-form-component></dynamic-form-component>
+<!-- Here is our web component -->
 
 <script type="text/javascript" src="elements/elements.js"></script>
+
+<script type="text/javascript" src="scripts.js"></script>
 </body>
 </html>
 ```
-2. Add new script entries to `package.json` in the root folder to serve your new project.
+8. Create a `styles.css` file in `projects/demo-stand-alone` and insert following content:
+```css
+h1 {
+  color:forestgreen !important;
+}
+
+.mat-form-field-infix .mat-input-element {
+  color: #69f0ae;
+}
+```
+9. Add new script entries to `package.json` in the root folder to serve your new project.
 ```json
 {
   ...
@@ -1304,14 +1506,448 @@ Now finally let's test a bundled version of the elements.
 }
 ``` 
 
-3. Test your setup.
+10. Test your setup: `npm run serve:all:demo-stand-alone:bundled-elements`.
+
 Here we have to spin up 2 different consoles to test it.
 Open a first console and run `serve:elements:bundled` to serve the elements file.
 Then open a second and after the process in the first one is finished run `serve:demo-stand-alone:bundled-elements`.
  
 Open the browser under localhost:4200 and you should see a working result.
 
-## Loading strategies
+## Styling Strategies
+
+- [x] View encapsulation with option `None`
+- [x] View encapsulation with option `ShadowDom`
+- [x] View encapsulation with option `Emulated`
+
+### View Encapsulation with Option `None`
+When can set `encapsulation` of our component to `ViewEncapsulation.None` like this: 
+```typescript
+@Component({
+  ... !!! CHANGES HERE !!!
+  encapsulation: ViewEncapsulation.None
+})
+export class WebComponent {
+    ...
+}
+```
+Here we can override the styles of a web component by just adding styles to our `styles.css`.
+
+As we can see in the demo app when running `npm run start` the headlines of the components are green. 
+This style rule is placed in our `projects/styles.css` file.
+
+### View Encapsulation with Option `ShadowDom`
+When using `ViewEncapsulation.ShadowDom` we seal the components styles by using the [Shadow DOM](https://w3c.github.io/webcomponents/spec/shadow/).
+```typescript
+@Component({
+  ... !!! CHANGES HERE !!!
+  encapsulation: ViewEncapsulation.ShadowDom
+})
+export class WebComponent {
+    ...
+}
+```
+
+By definition of the shadow dom now we can't override styling of our web-components.
+We test it by checking if we the headlines of the different web components are NOT green anymore.
+
+### View Encapsulation with Option `Emulated`
+
+When using `ViewEncapsulation.Emulated` is the default setting and emulates the behavior of shadow DOM by applying styles over attributes.
+
+```typescript
+@Component({
+  ... !!! CHANGES HERE !!!
+  encapsulation: ViewEncapsulation.Emulated
+})
+export class WebComponent {
+    ...
+}
+```
+Here, same as with `ViewEncapsulation.ShadowDom` we can't override styling of our web-components.
+
+### Setup Build and Serve Scripts for the Different Styling Strategies 
+
+This will be a pretty big change is out code base. So be cautious and read carefully!
+
+From the above strategies we can go with 2 different approaches:
+- Bundling global styles with the web components and use `ViewEncapsulation.ShadowDom` (styles are independent of consumer application)
+- Exclude global styles from the web components bundle and use `ViewEncapsulation.None` (styles are applied by consumer application)
+ 
+Together with the zone-less scripts for build and serve we end up with following variants ov the bundle:
+- Environment: **Production**, Change detection: **Zone-Full**, Global styles: **included**, View encapsulation: **ShadowDom**
+- Environment: **Production**, Change detection: **Zone-Full**, Global styles: **excluded**, View encapsulation: **None**
+- Environment: **Production**, Change detection: **Zone-Less**, Global styles: **included**, View encapsulation: **ShadowDom**
+- Environment: **Production**, Change detection: **Zone-Less**, Global styles: **excluded**, View encapsulation: **None**
+- Environment: **Development**, Change detection: **Zone-Full**, Global styles: **included**, View encapsulation: **ShadowDom**
+- Environment: **Development**, Change detection: **Zone-Full**, Global styles: **excluded**, View encapsulation: **None**
+- Environment: **Development**, Change detection: **Zone-Less**, Global styles: **included**, View encapsulation: **ShadowDom**
+- Environment: **Development**, Change detection: **Zone-Less**, Global styles: **excluded**, View encapsulation: **None**
+
+Another problem next to the number of different bundles is the view encapsulation.
+It has to be different for different builds.
+
+We need a way to have it dynamic dependent on the bundle variant. 
+One way to approach this could be to move the setting for `encapsulation` from the component to the `environment.ts` file and use environment settings to solve our problem.
+
+**Setup `environment' files**
+1. Open the folder `projects/elements/src/environments` and delete the `environments.prod.ts` file.
+2. Add following line to your `environments.prod.ts` file: 
+```typescript
+... !!! CHANGES HERE !!!
+import {ViewEncapsulation} from "@angular/core";
+
+export const environment = {
+... !!! CHANGES HERE !!!
+  encapsulation: ViewEncapsulation.None
+};
+...
+```
+3. Create following files: 
+- `environment.devVeNo.ts`
+- `environment.devVeSd.ts`
+- `environment.prodVeNo.ts`
+- `environment.prodVeSd.ts`
+4. Insert following content into the created files:
+```typescript
+import {ViewEncapsulation} from "@angular/core";
+
+export const environment = {
+  production: false,
+  encapsulation: ViewEncapsulation.None
+};
+```
+5. Update the settings per file: 
+- devVeNo: set key `production` to `false` and key `encapsulation` to `ViewEncapsulation.None`
+- devVeSd: set key `production` to `false` and key `encapsulation` to `ViewEncapsulation.ShadowDom`
+- prodVeNo: set key `production` to `true` and key `encapsulation` to `ViewEncapsulation.None`
+- prodVeSd: set key `production` to `true` and key `encapsulation` to `ViewEncapsulation.ShadowDom`
+
+**Adopt architect API**
+1. In the `angular.json` file under `projects.elements.architect.build.configurations` delete all settings and insert following:
+```json
+"prodVeNo": {
+  "fileReplacements": [
+    {
+      "replace": "projects/elements/src/environments/environment.ts",
+      "with": "projects/elements/src/environments/environment.prodVeNo.ts"
+    }
+  ],
+  "optimization": true,
+  "sourceMap": false,
+ "namedChunks": false,
+  "aot": true,
+  "extractLicenses": true,
+  "vendorChunk": false,
+  "buildOptimizer": true,
+  "bundleStyles": false,
+  "keepPolyfills": true
+},
+"prodVeSd": {
+  "fileReplacements": [
+    {
+      "replace": "projects/elements/src/environments/environment.ts",
+      "with": "projects/elements/src/environments/environment.prodVeSd.ts"
+    }
+  ],
+  "optimization": true,
+  "sourceMap": false,
+  "namedChunks": false,
+  "aot": true,
+  "extractLicenses": true,
+  "vendorChunk": false,
+  "buildOptimizer": true
+},
+"devVeNo": {
+  "fileReplacements": [
+    {
+      "replace": "projects/elements/src/environments/environment.ts",
+      "with": "projects/elements/src/environments/environment.devVeNo.ts"
+    }
+  ]
+},
+"devVeSd": {
+  "fileReplacements": [
+    {
+      "replace": "projects/elements/src/environments/environment.ts",
+      "with": "projects/elements/src/environments/environment.devVeSd.ts"
+    }
+  ]
+},
+"prodZoneLessVeNo": {
+  "outputPath": "dist/elements-zone-less",
+  "polyfills": "projects/elements/src/polyfills.zone-less.ts",
+  "fileReplacements": [
+    {
+      "replace": "projects/elements/src/environments/environment.ts",
+      "with": "projects/elements/src/environments/environment.prodVeNo.ts"
+    }
+  ]
+},
+"prodZoneLessVeSd": {
+  "outputPath": "dist/elements-zone-less",
+  "polyfills": "projects/elements/src/polyfills.zone-less.ts",
+  "fileReplacements": [
+    {
+      "replace": "projects/elements/src/environments/environment.ts",
+      "with": "projects/elements/src/environments/environment.prodVeSd.ts"
+    }
+  ]
+},
+"devZoneLessVeNo": {
+  "outputPath": "dist/elements-zone-less",
+  "polyfills": "projects/elements/src/polyfills.zone-less.ts",
+  "fileReplacements": [
+    {
+      "replace": "projects/elements/src/environments/environment.ts",
+      "with": "projects/elements/src/environments/environment.devVeNo.ts"
+    }
+  ]
+},
+"devZoneLessVeSd": {
+  "outputPath": "dist/elements-zone-less",
+  "polyfills": "projects/elements/src/polyfills.zone-less.ts",
+  "fileReplacements": [
+    {
+      "replace": "projects/elements/src/environments/environment.ts",
+      "with": "projects/elements/src/environments/environment.devVeSd.ts"
+    }
+  ]
+}
+```
+
+2. And under `projects.elements.architect.serve.configurations` delete all settings and insert following:
+```json
+"devVeNo": {
+  "browserTarget": "elements:build:devVeNo"
+},
+"devVeSd": {
+  "browserTarget": "elements:build:devVeSd"
+},
+"devZoneLessVeNo": {
+  "browserTarget": "elements:build:devZoneLessVeNo"
+},
+"devZoneLessVeSd": {
+  "browserTarget": "elements:build:devZoneLessVeSd"
+}
+```
+
+3. Add following to `element-bundling.js` located in `tooling`:
+```javascript
+...
+Promise.all([
+  // Zone-Full Build
+  
+  ... !!! CHANGES HERE !!!
+  // es2015 Style-Less
+  bundleZoneFullStyleLessEs2015(),
+  ...
+
+  // Zone-Less Bundling
+  ... !!! CHANGES HERE !!!
+  // es2015 Style-Less
+  bundleZoneLessStyleLessEs2015()
+ ])
+
+...
+
+... !!! CHANGES HERE !!!
+// Zone-Full Bundling
+
+// es2015 style less
+    function bundleZoneFullStyleLessEs2015() {
+      return fs.ensureDir('./dist/elements')
+        .then(() => {
+          return concat([
+            './dist/elements/polyfills-es2015.js',
+            './dist/elements/main-es2015.js'
+          ], './dist/elements/elements.style-less.js');
+        })
+        .catch(err => {
+          console.error('Error while bundling elements check if you build it already');
+        });
+    }
+... !!! CHANGES HERE !!!
+// Zone-Less Bundling
+
+// es2015 Style less
+function bundleZoneLessStyleLessEs2015() {
+  return fs.ensureDir('./dist/elements-zone-less')
+    .then(() => {
+      return concat([
+        './dist/elements/polyfills-es2015.js',
+        './dist/elements/main-es2015.js'
+      ], './dist/elements-zone-less/elements.style-less.js')
+    }).catch(err => {
+      console.error('Error while bundling elements-zone-less check if you build it already');
+    });
+}
+```
+4. Now switch to under `projects.demo.architect.build.configurations` in the `angular.json`, delete all settings and insert following:
+```json
+"withElementsVeNo": {
+  "scripts": [
+    "dist/elements/elements.style.less.js"
+  ]
+},
+"withElementsVeSd": {
+  "scripts": [
+    "dist/elements/elements.js"
+  ]
+},
+"withElementsZoneLessVeNo": {
+  "scripts": [
+    "dist/elements-zone-less/elements.style-less.js"
+  ]
+},
+"withElementsZoneLessVeSd": {
+  "scripts": [
+    "dist/elements-zone-less/elements.js"
+  ]
+},
+"zoneLessVeNo": {
+  "main": "projects/demo/src/main.zone-less.ts",
+  "polyfills": "projects/demo/src/polyfills.zone-less.ts",
+  "scripts": [
+    "dist/elements-zone-less/elements.style-less.js"
+  ]
+},
+"zoneLessVeSd": {
+  "main": "projects/demo/src/main.zone-less.ts",
+  "polyfills": "projects/demo/src/polyfills.zone-less.ts",
+  "scripts": [
+    "dist/elements-zone-less/elements.js"
+  ]
+}
+```
+5. And under `projects.demo.architect.serve.configurations` delete all settings but `production` and insert following:
+```json
+"withElementsVeNo": {
+  "browserTarget": "demo:build:withElementsVeNo"
+},
+"withElementsVeSd": {
+  "browserTarget": "demo:build:withElementsVeSd"
+},
+"withElementsZoneLessVeNo": {
+  "browserTarget": "demo:build:withElementsZoneLessVeNo"
+},
+"withElementsZoneLessVeSd": {
+  "browserTarget": "demo:build:withElementsZoneLessVeSd"
+},
+"zoneLessVeNo": {
+  "browserTarget": "demo:build:zoneLessVeNo"
+},
+"zoneLessVeSd": {
+  "browserTarget": "demo:build:zoneLessVeSd"
+}
+```
+6. Create `index.dev.style-less.html` in folder `projects/demo-stand-alone` and insert following content:
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="styles.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="indigo-pink.css" media="screen"/>
+</head>
+<body>
+
+<h1>WebComponent ng serve</h1>
+
+<button id="setAttribute">webComponent.setAttribute('value', 'test)</button>
+<br>
+<button id="setProperty">webComponent.value = 'test'</button>
+<br>
+Update: <code id="update">No Update Happened Yet</code>
+<web-component></web-component>
+<hr>
+<mat-web-component></mat-web-component>
+<hr>
+<dynamic-form-component></dynamic-form-component>
+<!-- Here is our web component -->
+
+<script type="text/javascript" src="elements/polyfills.js"></script>
+<script type="text/javascript" src="elements/main.js"></script>
+
+<script type="text/javascript" src="scripts.js"></script>
+</body>
+</html>
+```
+7. Create `index.style-less.html` in folder `projects/demo-stand-alone` and insert following content:
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="indigo-pink.css" media="screen" />
+</head>
+<body>
+
+<h1>WebComponent Final-Bundle</h1>
+
+<button id="setAttribute">webComponent.setAttribute('value', 'test)</button>
+<br>
+<button id="setProperty">webComponent.value = 'test</button>
+<br>
+Update: <code id="update">No Update Happened Yet</code>
+<web-component></web-component>
+<hr>
+<mat-web-component></mat-web-component>
+<hr>
+<dynamic-form-component></dynamic-form-component>
+<!-- Here is our web component -->
+
+<script type="text/javascript" src="elements/elements.style-less.js"></script>
+
+<script type="text/javascript" src="scripts.js"></script>
+</body>
+</html>
+```
+
+7. Replace the scripts section in your `package.json` in the root folder with following settings:
+```json
+{
+    ... !!! CHANGES HERE !!!
+  "scripts": {
+    "ng": "ng",
+    "start": "npm-run-all --parallel serve:demo serve:elements:veNo",
+    "serve:all:elements-vENo": "npm-run-all --parallel serve:demo serve:elements:veNo",
+    "serve:all:elements-vESd": "npm-run-all --parallel serve:demo serve:elements:veSd",
+    "serve:all:elements-zone-less": "npm-run-all --parallel serve:demo serve:elements:zone-less",
+    "serve:all:demo-zone-less": "npm-run-all --parallel serve:demo:zone-less serve:elements:veNo:zone-less",
+    "serve:all:demo-stand-alone:hot-elements": "npm-run-all --parallel serve:demo-stand-alone:hot-elements serve:elements:veNo",
+    "serve:all:demo-stand-alone:bundled-elements": "!!NOTE!!! => serve:elements:bundled and serve:demo-stand-alone:bundled-elements needs to be run in separate consoles :(",
+    "build:all:bundled": "npm-run-all --sequential build:all generate:bundles",
+    "build:all": "npm-run-all --parallel build:elements:veNo build:elements:veSd build:elements:veNo:zone-less build:elements:veSd:zone-less",
+    "generate:bundles": "node ./tooling/elements-bundling.js",
+    "build:elements:veNo": "ng build --project elements -c=prodVeNo",
+    "build:elements:veSd": "ng build --project elements -c=prodVeSd",
+    "build:elements:veNo:zone-less": "ng build --project elements -c=prodZoneLessVeNo",
+    "build:elements:veSd:zone-less": "ng build --project elements -c=prodZoneLessVeSd",
+    "serve:elements:veNo":           "ng serve --project elements -c=devVeNo",
+    "serve:elements:veSd":           "ng serve --project elements -c=devVeSd",
+    "serve:elements:veNo:zone-less": "ng serve --project elements -c=devZoneLessVeNo",
+    "serve:elements:veSd:zone-less": "ng serve --project elements -c=devZoneLessVeSd",
+    "serve:elements:veNo:bundled": "npm run build:elements:veNo && npm run generate:bundles && cd dist/elements/ && live-server --host=localhost --port=4242 --no-browser",
+    "serve:elements:veSd:bundled": "npm run build:elements:veSd && npm run generate:bundles && cd dist/elements/ && live-server --host=localhost --port=4242 --no-browser",
+    "build:demo": "ng build --prod",
+    "serve:demo": "ng serve --project demo",
+    "serve:demo:zone-less": "ng serve --project demo -c=zoneLess",
+    "serve:demo:with-elements:VeNo": "ng serve --project demo -c=withElementsVeNo",
+    "serve:demo:with-elements:VeSd": "ng serve --project demo -c=withElementsVeSd",
+    "serve:demo:with-elements:VeNo:zone-less": "ng serve --project demo -c=withElementsZoneLessVeNo",
+    "serve:demo:with-elements:VeSd:zone-less": "ng serve --project demo -c=withElementsZoneLessVeSd",
+    "serve:demo-stand-alone:hot-elements-no-style": "cd projects/demo-stand-alone && live-server --host=localhost --port=4200 --proxy=/elements/:http://localhost:4242/ --open=index.dev.style-less.html",
+    "serve:demo-stand-alone:hot-elements": "cd projects/demo-stand-alone && live-server --host=localhost --port=4200 --proxy=/elements/:http://localhost:4242/ --open=index.dev.html",
+    "serve:demo-stand-alone:bundled-elements": "cd projects/demo-stand-alone && live-server --host=localhost --port=4200 --proxy=/elements/:http://localhost:4242/"
+  },
+  ...
+}
+```
+6. `npm run serve:demo:with-elements` 
+
+## Loading Strategies
 
 There are different loading strategies. Some of them are not only convenient but also help to solve problems in change detection.   
 In this document we discuss following strategies:
@@ -1409,7 +2045,7 @@ as the elements are loaded only if they are needed.
 
 @TODO
 
-## Productivity Helpers PoC's
+## Productivity Helpers
 - [x] Push Pipe
 - [x] Let Directive
 - [x] CdOn Directive

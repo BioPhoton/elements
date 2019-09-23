@@ -1,27 +1,22 @@
 import {ChangeDetectionStrategy, Component, Input, Output} from '@angular/core';
-import {ReplaySubject, Subject} from 'rxjs';
-import {withLatestFrom} from "rxjs/operators";
+import {Subject} from 'rxjs';
+import {environment} from "../environments/environment";
 
 @Component({
   template: `
-      <h1>WebComponent</h1>
-      <p>@Input() value: {{value$ | async | json}}</p>
-      <button (click)="update$.next($event)">trigger output</button>
-      test: {{test}}
+      <h1 id="web-component-h1">WebComponent</h1>
+      <p>@Input() value: {{value | json}}</p>
+      <button (click)="update.next(value)">trigger output</button>
   `,
-  // @NOTICE Change to .OnPush only works with reactive architecture atm
-  changeDetection: ChangeDetectionStrategy.Default
+  styles: [ `h1 { color:mediumvioletred }` ],
+  encapsulation: environment.encapsulation,
+  changeDetection: environment.changeDetection
 })
 export class WebComponent {
-  test = 'test';
+  @Input() value: string;
+  @Output() update = new Subject();
 
-  value$ = new ReplaySubject<string>(1);
-  @Input() set value(v: string) {
-    console.log('wc set value', v);
-    this.value$.next(v);
+  constructor() {
+    console.log('environment: ', environment);
   }
-
-  update$ = new Subject();
-  @Output() update = this.update$
-    .pipe(withLatestFrom(this.value$));
 }

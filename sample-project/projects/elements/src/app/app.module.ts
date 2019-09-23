@@ -5,25 +5,31 @@ import {UiOverviewComponent} from './ui-overview/ui-overview.component';
 import {UI_OVERVIEW_MODULES} from './ui-overview/ui-overview-modules';
 import {UiFormComponent} from './ui-form/ui-form.component';
 import {UI_FORM_MODULES} from './ui-form/ui-form-modules';
-import {WebComponent} from "./web.component";
+import {WebComponent} from './web.component';
 import {MatWebComponent} from './mat-web.component';
-import {DynamicFormWebComponent} from './dynamic-form-web.component';
+import {DynamicFormWebComponent} from './dynamic-form.component';
+import {MatFormFieldModule, MatInputModule} from '@angular/material';
+import {HelpersModule} from "../../../helpers/src/lib/helpers.module";
 
 export const ANGUlAR_ELEMENTS: [any, string, any[]][] = [
+  [UiOverviewComponent, 'ui-overview', UI_OVERVIEW_MODULES],
+  [UiFormComponent, 'ui-form', UI_FORM_MODULES],
   [WebComponent, 'web-component', []],
   [MatWebComponent, 'mat-web-component', []],
-  [DynamicFormWebComponent, 'dynamic-form-component', []],
-  [UiOverviewComponent, 'ui-overview', UI_OVERVIEW_MODULES],
-  [UiFormComponent, 'ui-form', UI_FORM_MODULES]
+  [DynamicFormWebComponent, 'dynamic-form-component', []]
 ];
 export const MODULES = ANGUlAR_ELEMENTS.map(a => a[2]);
-export const DECLARATIONS = ANGUlAR_ELEMENTS.map(a => a[0]);
+export const DECLARATIONS = [UiOverviewComponent, UiFormComponent, WebComponent, MatWebComponent, DynamicFormWebComponent];
 
 @NgModule({
   declarations: [DECLARATIONS],
   imports: [
     BrowserModule,
-    MODULES
+    MatFormFieldModule,
+    MatInputModule,
+    HelpersModule,
+    UI_OVERVIEW_MODULES,
+    UI_FORM_MODULES
   ],
   entryComponents: [DECLARATIONS]
 })

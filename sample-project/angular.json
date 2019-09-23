@@ -66,19 +66,39 @@
                 }
               ]
             },
-            "withElements": {
+            "withElementsVeNo": {
+              "scripts": [
+                "dist/elements/elements.style.less.js"
+              ]
+            },
+            "withElementsVeSd": {
               "scripts": [
                 "dist/elements/elements.js"
               ]
             },
-            "withElementsZoneLess": {
+            "withElementsZoneLessVeNo": {
+              "scripts": [
+                "dist/elements-zone-less/elements.style-less.js"
+              ]
+            },
+            "withElementsZoneLessVeSd": {
               "scripts": [
                 "dist/elements-zone-less/elements.js"
               ]
             },
-            "zoneLess": {
+            "zoneLessVeNo": {
               "main": "projects/demo/src/main.zone-less.ts",
-              "polyfills": "projects/demo/src/polyfills.zone-less.ts"
+              "polyfills": "projects/demo/src/polyfills.zone-less.ts",
+              "scripts": [
+                "dist/elements-zone-less/elements.style-less.js"
+              ]
+            },
+            "zoneLessVeSd": {
+              "main": "projects/demo/src/main.zone-less.ts",
+              "polyfills": "projects/demo/src/polyfills.zone-less.ts",
+              "scripts": [
+                "dist/elements-zone-less/elements.js"
+              ]
             }
           }
         },
@@ -92,14 +112,23 @@
             "production": {
               "browserTarget": "demo:build:production"
             },
-            "withElements": {
-              "browserTarget": "demo:build:withElements"
+            "withElementsVeNo": {
+              "browserTarget": "demo:build:withElementsVeNo"
             },
-            "withElementsZoneLess": {
-              "browserTarget": "demo:build:withElementsZoneLess"
+            "withElementsVeSd": {
+              "browserTarget": "demo:build:withElementsVeSd"
             },
-            "zoneLess": {
-              "browserTarget": "demo:build:zoneLess"
+            "withElementsZoneLessVeNo": {
+              "browserTarget": "demo:build:withElementsZoneLessVeNo"
+            },
+            "withElementsZoneLessVeSd": {
+              "browserTarget": "demo:build:withElementsZoneLessVeSd"
+            },
+            "zoneLessVeNo": {
+              "browserTarget": "demo:build:zoneLessVeNo"
+            },
+            "zoneLessVeSd": {
+              "browserTarget": "demo:build:zoneLessVeSd"
             }
           }
         },
@@ -173,61 +202,127 @@
             "polyfills": "projects/elements/src/polyfills.ts",
             "tsConfig": "projects/elements/tsconfig.app.json",
             "aot": false,
-            "assets": [
-              "projects/elements/src/favicon.ico",
-              "projects/elements/src/assets"
-            ],
+            "assets": [],
             "styles": [
               "projects/elements/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "singleBundle": true,
+            "bundleStyles": false,
+            "keepPolyfills": true
           },
           "configurations": {
-            "production": {
+            "prodVeNo": {
               "fileReplacements": [
                 {
                   "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.prod.ts"
+                  "with": "projects/elements/src/environments/environment.prodVeNo.ts"
                 }
               ],
               "optimization": true,
-              "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
+             "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
+              "bundleStyles": false,
+              "keepPolyfills": true
+            },
+            "prodVeSd": {
+              "fileReplacements": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.prodVeSd.ts"
+                }
+              ],
+              "optimization": true,
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "devVeNo": {
+              "fileReplacements": [
                 {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.devVeNo.ts"
                 }
               ]
             },
-            "zoneLess": {
-              "polyfills": "projects/elements/src/polyfills.zone-less.ts"
+            "devVeSd": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.devVeSd.ts"
+                }
+              ]
+            },
+            "prodZoneLessVeNo": {
+              "outputPath": "dist/elements-zone-less",
+              "polyfills": "projects/elements/src/polyfills.zone-less.ts",
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.prodVeNo.ts"
+                }
+              ]
+            },
+            "prodZoneLessVeSd": {
+              "outputPath": "dist/elements-zone-less",
+              "polyfills": "projects/elements/src/polyfills.zone-less.ts",
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.prodVeSd.ts"
+                }
+              ]
+            },
+            "devZoneLessVeNo": {
+              "outputPath": "dist/elements-zone-less",
+              "polyfills": "projects/elements/src/polyfills.zone-less.ts",
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.devVeNo.ts"
+                }
+              ]
+            },
+            "devZoneLessVeSd": {
+              "outputPath": "dist/elements-zone-less",
+              "polyfills": "projects/elements/src/polyfills.zone-less.ts",
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.devVeSd.ts"
+                }
+              ]
             }
           }
         },
         "serve": {
           "builder": "ngx-build-plus:dev-server",
           "options": {
-            "browserTarget": "elements:build"
+            "browserTarget": "elements:build",
+            "port": 4242,
+            "singleBundle": true,
+            "bundleStyles": false,
+            "keepPolyfills": true
           },
           "configurations": {
-            "production": {
-              "browserTarget": "elements:build:production"
+            "devVeNo": {
+              "browserTarget": "elements:build:devVeNo"
             },
-            "zoneLess": {
-              "browserTarget": "elements:build:zoneLess"
+            "devVeSd": {
+              "browserTarget": "elements:build:devVeSd"
+            },
+            "devZoneLessVeNo": {
+              "browserTarget": "elements:build:devZoneLessVeNo"
+            },
+            "devZoneLessVeSd": {
+              "browserTarget": "elements:build:devZoneLessVeSd"
             }
           }
         },

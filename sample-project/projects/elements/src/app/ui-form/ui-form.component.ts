@@ -2,7 +2,8 @@ import {Component, Input, Output, ViewEncapsulation} from '@angular/core';
 import {DynamicFormControlModel, DynamicFormModel, DynamicFormService} from '@ng-dynamic-forms/core';
 import {FormGroup} from '@angular/forms';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {map, shareReplay, tap, withLatestFrom} from 'rxjs/operators';
+import {map, shareReplay, withLatestFrom} from 'rxjs/operators';
+import {environment} from "../../environments/environment";
 
 interface DynamicFormControlModelRaw extends DynamicFormControlModel {
   _value: string;
@@ -11,7 +12,7 @@ interface DynamicFormControlModelRaw extends DynamicFormControlModel {
 @Component({
   templateUrl: './ui-form.component.html',
   styleUrls: ['./ui-form.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: environment.encapsulation
 })
 export class UiFormComponent {
 
