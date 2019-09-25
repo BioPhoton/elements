@@ -3,23 +3,23 @@ const concat = require('concat');
 
 Promise.all([
   // Zone-Full Bundling
-  // es2015
-  bundleZoneFullEs2015(),
-  // es2015 Style-Less
-  bundleZoneFullStyleLessEs2015(),
-  // es5
-  bundleZoneFullEs5(),
-  // es5 Style-Less
-  bundleZoneFullStyleLessEs5(),
+  // es2015 StandAlone
+  bundleElements('elements', true, true),
+  // es2015 Controlled
+  bundleElements('elements', true, false),
+  // es5 StandAlone
+  bundleElements('elements', true, true, true),
+  // es5 Controlled
+  bundleElements('elements', true, false, true),
   // Zone-Less Bundling
-// es2015
-bundleZoneLessEs2015(),
-// es2015 Style-Less
-bundleZoneLessStyleLessEs2015(),
-// es5
-bundleZoneLessEs5(),
-// es5 Style-Less
-bundleZoneLessStyleLessEs5()
+  // es2015 StandAlone
+  bundleElements('elements', false, true),
+  // es2015 Controlled
+  bundleElements('elements', false, false),
+  // es5 StandAlone
+  bundleElements('elements', false, true, true),
+  // es5 Controlled
+  bundleElements('elements', false, false, true)
 ])
   .then(() => {
     console.log('Bundled elements success-fully');
@@ -28,116 +28,20 @@ bundleZoneLessStyleLessEs5()
     console.error(error);
   });
 
-// Zone-Full Bundling
-
-// es2015
-function bundleZoneFullEs2015() {
-  return fs.ensureDir('./dist/elements')
+function bundleElements(project = 'elements', zoneFull = true, standAlone = true, es5 = false) {
+  const jsVersion = es5 ? 'es5' : 'es2015';
+  let folderName = project;
+  folderName = !zoneFull ? folderName + '-zone-less' : folderName;
+  folderName = standAlone ? folderName + '-stand-alone' : folderName + '-controlled';
+  return fs.ensureDir(`./dist/${folderName}`)
     .then(() => {
       return concat([
-        './dist/elements/polyfills-es2015.js',
-        './dist/elements/styles-es2015.js',
-        './dist/elements/main-es2015.js'
-      ], './dist/elements/elements.js');
+        `./dist/${folderName}/polyfills-${jsVersion}.js`,
+        `./dist/${folderName}/main-${jsVersion}.js`
+      ], `./dist/${folderName}/elements${es5 ? '.' + jsVersion : ''}.js`)
+        .then(() => console.log(`Successful bundled project ${project} for ${zoneFull ? 'Zone-Full' : 'Zone-Less'} ${standAlone ? 'Stand-Alone' : 'Controlled'} for ECMAScript ${es5 ? 'es5' : 'es2015'}.`));
     })
     .catch(err => {
-      console.error('Error while bundling elements check if you build it already');
-    });
-}
-// es2015 style less
-function bundleZoneFullStyleLessEs2015() {
-  return fs.ensureDir('./dist/elements')
-    .then(() => {
-      return concat([
-        './dist/elements/polyfills-es2015.js',
-        './dist/elements/main-es2015.js'
-      ], './dist/elements/elements.style-less.js');
-    })
-    .catch(err => {
-      console.error('Error while bundling elements check if you build it already');
-    });
-}
-
-// es5
-function bundleZoneFullEs5() {
-  return fs.ensureDir('./dist/elements')
-    .then(() => {
-      return concat([
-        './dist/elements/polyfills-es5.js',
-        './dist/elements/styles-es5.js',
-        './dist/elements/main-es5.js'
-      ], './dist/elements/elements-es5.js')
-    }).catch(err => {
-      console.error('Error while bundling elements-es5 check if you build it already');
-    });
-}
-// es5 Style-Less
-function bundleZoneFullStyleLessEs5() {
-  return fs.ensureDir('./dist/elements')
-    .then(() => {
-      return concat([
-        './dist/elements/polyfills-es5.js',
-        './dist/elements/main-es5.js'
-      ], './dist/elements/elements-es5.style-less.js')
-    }).catch(err => {
-      console.error('Error while bundling elements-es5 check if you build it already');
-    });
-}
-
-// Zone-Less Bundling
-
-// es2015
-function bundleZoneLessEs2015() {
-  return fs.ensureDir('./dist/elements-zone-less')
-    .then(() => {
-      return concat([
-        './dist/elements/polyfills-es2015.js',
-        './dist/elements/styles-es2015.js',
-        './dist/elements/main-es2015.js'
-      ], './dist/elements-zone-less/elements.js')
-    }).catch(err => {
-      console.error('Error while bundling elements-zone-less check if you build it already');
-    });
-}
-
-// es2015 Style less
-function bundleZoneLessStyleLessEs2015() {
-  return fs.ensureDir('./dist/elements-zone-less')
-    .then(() => {
-      return concat([
-        './dist/elements/polyfills-es2015.js',
-        './dist/elements/main-es2015.js'
-      ], './dist/elements-zone-less/elements.style-less.js')
-    }).catch(err => {
-      console.error('Error while bundling elements-zone-less check if you build it already');
-    });
-}
-
-
-// es5
-function bundleZoneLessEs5() {
-  return fs.ensureDir('./dist/elements-zone-less')
-    .then(() => {
-      return concat([
-        './dist/elements/polyfills-es5.js',
-        './dist/elements/styles-es5.js',
-        './dist/elements/main-es5.js'
-      ], './dist/elements-zone-less/elements-es5.js')
-    }).catch(err => {
-      console.error('Error while bundling elements-zone-less-es5 check if you build it already');
-    });
-}
-
-// es5 Style-Less
-function bundleZoneLessStyleLessEs5() {
-  return fs.ensureDir('./dist/elements-zone-less')
-    .then(() => {
-      return concat([
-        './dist/elements/polyfills-es5.js',
-        './dist/elements/styles-es5.js',
-        './dist/elements/main-es5.js'
-      ], './dist/elements-zone-less/elements-es5.style-less.js')
-    }).catch(err => {
-      console.error('Error while bundling elements-zone-less-es5 check if you build it already');
+      console.error(`Error while bundling elements for ${zoneFull ? 'Zone-Full' : 'Zone-Less'} ${standAlone ? 'Stand-Alone' : 'Controlled'} for ECMAScript ${es5 ? 'es5' : 'es2015'}.`);
     });
 }

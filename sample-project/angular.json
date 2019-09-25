@@ -66,38 +66,60 @@
                 }
               ]
             },
-            "withElementsVeNo": {
-              "scripts": [
-                "dist/elements/elements.style.less.js"
+            "controlled": {
+              "styles": [
+                "projects/demo/src/styles.scss",
+                "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
               ]
             },
-            "withElementsVeSd": {
-              "scripts": [
-                "dist/elements/elements.js"
+            "standAlone": {
+              "styles": [
+                "projects/demo/src/styles.scss"
               ]
             },
-            "withElementsZoneLessVeNo": {
-              "scripts": [
-                "dist/elements-zone-less/elements.style-less.js"
-              ]
-            },
-            "withElementsZoneLessVeSd": {
-              "scripts": [
-                "dist/elements-zone-less/elements.js"
-              ]
-            },
-            "zoneLessVeNo": {
-              "main": "projects/demo/src/main.zone-less.ts",
+            "controlledZoneLess": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/demo/src/environments/environment.ts",
+                  "with": "projects/demo/src/environments/environment.zoneLess.ts"
+                }
+              ],
               "polyfills": "projects/demo/src/polyfills.zone-less.ts",
-              "scripts": [
-                "dist/elements-zone-less/elements.style-less.js"
+              "styles": [
+                "projects/demo/src/styles.scss",
+                "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
               ]
             },
-            "zoneLessVeSd": {
-              "main": "projects/demo/src/main.zone-less.ts",
+            "standAloneZoneLess": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/demo/src/environments/environment.ts",
+                  "with": "projects/demo/src/environments/environment.zoneLess.ts"
+                }
+              ],
               "polyfills": "projects/demo/src/polyfills.zone-less.ts",
+              "styles": [
+                "projects/demo/src/styles.scss"
+              ]
+            },
+            "withElementsControlled": {
               "scripts": [
-                "dist/elements-zone-less/elements.js"
+                "dist/elements-controlled/elements.js"
+              ]
+            },
+            "withElementsStandAlone": {
+              "scripts": [
+                "dist/elements-stand-alone/elements.js"
+              ]
+            },
+            "withElementsZoneLessControlled": {
+              "scripts": [
+                "dist/elements-zone-less-controlled/elements.js"
+              ]
+            },
+            "withElementsZoneLessStandAlone": {
+              "scripts": [
+                "dist/elements-zone-less-stand-alone/elements.js"
               ]
             }
           }
@@ -112,23 +134,35 @@
             "production": {
               "browserTarget": "demo:build:production"
             },
-            "withElementsVeNo": {
-              "browserTarget": "demo:build:withElementsVeNo"
+            "controlled": {
+              "browserTarget": "demo:build:controlled"
             },
-            "withElementsVeSd": {
-              "browserTarget": "demo:build:withElementsVeSd"
+            "standAlone": {
+              "browserTarget": "demo:build:standAlone"
             },
-            "withElementsZoneLessVeNo": {
-              "browserTarget": "demo:build:withElementsZoneLessVeNo"
+            "controlledZoneLess": {
+              "browserTarget": "demo:build:controlledZoneLess"
             },
-            "withElementsZoneLessVeSd": {
-              "browserTarget": "demo:build:withElementsZoneLessVeSd"
+            "standAloneZoneLess": {
+              "browserTarget": "demo:build:standAloneZoneLess"
             },
-            "zoneLessVeNo": {
-              "browserTarget": "demo:build:zoneLessVeNo"
+            "withElementsControlled": {
+              "browserTarget": "demo:build:withElementsControlled"
             },
-            "zoneLessVeSd": {
-              "browserTarget": "demo:build:zoneLessVeSd"
+            "withElementsStandAlone": {
+              "browserTarget": "demo:build:withElementsStandAlone"
+            },
+            "withElementsZoneLessControlled": {
+              "browserTarget": "demo:build:withElementsZoneLessControlled"
+            },
+            "withElementsZoneLessStandAlone": {
+              "browserTarget": "demo:build:withElementsZoneLessStandAlone"
+            },
+            "zoneLessControlled": {
+              "browserTarget": "demo:build:zoneLessControlled"
+            },
+            "zoneLessStandAlone": {
+              "browserTarget": "demo:build:zoneLessStandAlone"
             }
           }
         },
@@ -208,32 +242,15 @@
             ],
             "scripts": [],
             "singleBundle": true,
-            "bundleStyles": false,
             "keepPolyfills": true
           },
           "configurations": {
-            "prodVeNo": {
+            "prodControlled": {
+              "outputPath": "dist/elements-controlled",
               "fileReplacements": [
                 {
                   "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.prodVeNo.ts"
-                }
-              ],
-              "optimization": true,
-              "sourceMap": false,
-             "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "bundleStyles": false,
-              "keepPolyfills": true
-            },
-            "prodVeSd": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.prodVeSd.ts"
+                  "with": "projects/elements/src/environments/environment.prodControlled.ts"
                 }
               ],
               "optimization": true,
@@ -242,61 +259,86 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "singleBundle": true,
+              "keepPolyfills": true
             },
-            "devVeNo": {
+            "prodStandAlone": {
+              "outputPath": "dist/elements-stand-alone",
               "fileReplacements": [
                 {
                   "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.devVeNo.ts"
+                  "with": "projects/elements/src/environments/environment.prodStandAlone.ts"
                 }
-              ]
+              ],
+              "optimization": true,
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "singleBundle": true,
+              "keepPolyfills": true
             },
-            "devVeSd": {
+            "prodControlledZoneLess": {
+              "outputPath": "dist/elements-controlled-zone-less",
               "fileReplacements": [
                 {
                   "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.devVeSd.ts"
+                  "with": "projects/elements/src/environments/environment.prodControlled.ts"
                 }
-              ]
+              ],
+              "singleBundle": true,
+              "keepPolyfills": true,
+              "extraWebpackConfig": "webpack.extra.js"
             },
-            "prodZoneLessVeNo": {
+            "prodStandAloneZoneLess": {
               "outputPath": "dist/elements-zone-less",
               "polyfills": "projects/elements/src/polyfills.zone-less.ts",
               "fileReplacements": [
                 {
                   "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.prodVeNo.ts"
+                  "with": "projects/elements/src/environments/environment.prodStandAlone.ts"
                 }
               ]
             },
-            "prodZoneLessVeSd": {
-              "outputPath": "dist/elements-zone-less",
+            "devControlled": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.devControlled.ts"
+                }
+              ]
+            },
+            "devStandAlone": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.devStandAlone.ts"
+                }
+              ],
+              "vendorChunk": false,
+              "singleBundle": true,
+              "keepPolyfills": true
+            },
+            "devControlledZoneLess": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements/src/environments/environment.ts",
+                  "with": "projects/elements/src/environments/environment.devControlled.ts"
+                }
+              ],
+              "singleBundle": true,
+              "keepPolyfills": true
+            },
+            "devStandAloneZoneLess": {
+              "outputPath": "dist/elements-zone-less-stand-alone",
               "polyfills": "projects/elements/src/polyfills.zone-less.ts",
               "fileReplacements": [
                 {
                   "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.prodVeSd.ts"
-                }
-              ]
-            },
-            "devZoneLessVeNo": {
-              "outputPath": "dist/elements-zone-less",
-              "polyfills": "projects/elements/src/polyfills.zone-less.ts",
-              "fileReplacements": [
-                {
-                  "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.devVeNo.ts"
-                }
-              ]
-            },
-            "devZoneLessVeSd": {
-              "outputPath": "dist/elements-zone-less",
-              "polyfills": "projects/elements/src/polyfills.zone-less.ts",
-              "fileReplacements": [
-                {
-                  "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.devVeSd.ts"
+                  "with": "projects/elements/src/environments/environment.devStandAlone.ts"
                 }
               ]
             }
@@ -308,21 +350,20 @@
             "browserTarget": "elements:build",
             "port": 4242,
             "singleBundle": true,
-            "bundleStyles": false,
             "keepPolyfills": true
           },
           "configurations": {
-            "devVeNo": {
-              "browserTarget": "elements:build:devVeNo"
+            "devControlled": {
+              "browserTarget": "elements:build:devControlled"
             },
-            "devVeSd": {
-              "browserTarget": "elements:build:devVeSd"
+            "devStandAlone": {
+              "browserTarget": "elements:build:devStandAlone"
             },
-            "devZoneLessVeNo": {
-              "browserTarget": "elements:build:devZoneLessVeNo"
+            "devControlledZoneLess": {
+              "browserTarget": "elements:build:devControlledZoneLess"
             },
-            "devZoneLessVeSd": {
-              "browserTarget": "elements:build:devZoneLessVeSd"
+            "devStandAloneZoneLess": {
+              "browserTarget": "elements:build:devStandAloneZoneLess"
             }
           }
         },
@@ -407,6 +448,133 @@
             "exclude": [
               "**/node_modules/**"
             ]
+          }
+        }
+      }
+    },
+    "elements-special": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/elements-special",
+      "sourceRoot": "projects/elements-special/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:browser",
+          "options": {
+            "outputPath": "dist/elements-special",
+            "index": "projects/elements-special/src/index.html",
+            "main": "projects/elements-special/src/main.ts",
+            "polyfills": "projects/elements-special/src/polyfills.ts",
+            "tsConfig": "projects/elements-special/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "projects/elements-special/src/favicon.ico",
+              "projects/elements-special/src/assets"
+            ],
+            "styles": [
+              "projects/elements-special/src/styles.scss"
+            ],
+            "scripts": [],
+            "singleBundle": true,
+            "keepPolyfills": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/elements-special/src/environments/environment.ts",
+                  "with": "projects/elements-special/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "options": {
+            "browserTarget": "elements-special:build",
+            "port": 4243,
+            "singleBundle": true,
+            "keepPolyfills": true
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "elements-special:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "elements-special:build"
+          }
+        },
+        "test": {
+          "builder": "ngx-build-plus:karma",
+          "options": {
+            "main": "projects/elements-special/src/test.ts",
+            "polyfills": "projects/elements-special/src/polyfills.ts",
+            "tsConfig": "projects/elements-special/tsconfig.spec.json",
+            "karmaConfig": "projects/elements-special/karma.conf.js",
+            "assets": [
+              "projects/elements-special/src/favicon.ico",
+              "projects/elements-special/src/assets"
+            ],
+            "styles": [
+              "projects/elements-special/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/elements-special/tsconfig.app.json",
+              "projects/elements-special/tsconfig.spec.json",
+              "projects/elements-special/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/elements-special/e2e/protractor.conf.js",
+            "devServerTarget": "elements-special:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "elements-special:serve:production"
+            }
           }
         }
       }

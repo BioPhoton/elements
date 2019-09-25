@@ -4,16 +4,24 @@ import {ElementsLoadingComponent} from './elements-loading.component';
 import {ElementsErrorComponent} from './elements-error.component';
 
 const BASIC_ELEMENTS_URL = 'elements/main.js';
+const SPECIAL_ELEMENTS_URL = 'elements-special/main.js';
+const SPECIAL_ELEMENTS_CONFIG = [
+  {tag: 'ui-form', url: SPECIAL_ELEMENTS_URL},
+  {tag: 'ui-overview', url: SPECIAL_ELEMENTS_URL}
+];
 const lazyElementsOptions: LazyElementModuleRootOptions = {
   elementConfigs: [
-    { tag: 'ui-form', url: BASIC_ELEMENTS_URL },
-    { tag: 'ui-overview', url: BASIC_ELEMENTS_URL }
+    ...SPECIAL_ELEMENTS_CONFIG,
+    {tag: 'web-component', url: BASIC_ELEMENTS_URL},
+    {tag: 'mat-web-component', url: BASIC_ELEMENTS_URL},
+    {tag: 'dynamic-form-component', url: BASIC_ELEMENTS_URL}
   ],
   rootOptions: {
     loadingComponent: ElementsLoadingComponent,
     errorComponent: ElementsErrorComponent
   }
 };
+
 @NgModule({
   declarations: [ElementsLoadingComponent, ElementsErrorComponent],
   imports: [

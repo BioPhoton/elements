@@ -1,0 +1,133 @@
+@import "../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
+.ui-overview-container {
+  position: relative;
+
+  .button-top-right,
+  .checkbox-top-right {
+    position: absolute;
+    top: 6px;
+    right: 200px;
+    z-index: 5000;
+  }
+
+  .checkbox-top-right {
+    top: 13px;
+    right: 0;
+
+    label {
+      margin-left: 5px;
+    }
+  }
+
+  .mat-table {
+    width: 100%;
+  }
+
+  .mat-progress-spinner {
+    margin: 0 auto !important;
+  }
+
+  [type='checkbox']:not(:checked),
+  [type='checkbox']:checked {
+    position: absolute;
+    left: -9999px;
+  }
+  [type='checkbox']:not(:checked) + label,
+  [type='checkbox']:checked + label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+  }
+
+  /* checkbox aspect */
+  [type='checkbox']:not(:checked) + label:before,
+  [type='checkbox']:checked + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(0, 0, 0, 0.54);
+    background: transparent;
+    border-radius: 2px;
+  }
+
+  [type='checkbox']:checked + label:before {
+    border: 2px solid #ffb300;
+    background: #ffb300;
+  }
+  /* checked mark aspect */
+  [type='checkbox']:not(:checked) + label:after,
+  [type='checkbox']:checked + label:after {
+    content: '\2713\0020';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 14px;
+    line-height: 7px;
+    color: white;
+    transition: all 0.2s;
+    font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', Arial;
+  }
+  /* checked mark aspect changes */
+  [type='checkbox']:not(:checked) + label:after {
+    opacity: 0;
+  }
+  [type='checkbox']:checked + label:after {
+    opacity: 1;
+  }
+  /* disabled checkbox */
+  [type='checkbox']:disabled:not(:checked) + label:before,
+  [type='checkbox']:disabled:checked + label:before {
+    box-shadow: none;
+    border-color: #bbb;
+    background-color: #ddd;
+  }
+  [type='checkbox']:disabled:checked + label:after {
+    color: #999;
+  }
+  [type='checkbox']:disabled + label {
+    color: #aaa;
+  }
+
+  // Expandable Table
+
+  tr.element-row {
+    &:not(.expanded-row):hover {
+      background: #ddd;
+    }
+
+    .mat-icon-button {
+      background: none;
+    }
+
+    .chevron-icon {
+      transform: rotateZ(90deg);
+    }
+
+    &.expanded-row {
+      .chevron-icon {
+        transform: rotateZ(270deg);
+      }
+    }
+  }
+
+  tr.detail-row {
+    display: none;
+
+    &.expanded-row {
+      display: table-row;
+    }
+
+    td.mat-cell {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    .element-description {
+      line-height: 1.5;
+    }
+  }
+}

@@ -18,7 +18,6 @@ export const ANGUlAR_ELEMENTS: [any, string, any[]][] = [
   [MatWebComponent, 'mat-web-component', []],
   [DynamicFormWebComponent, 'dynamic-form-component', []]
 ];
-export const MODULES = ANGUlAR_ELEMENTS.map(a => a[2]);
 export const DECLARATIONS = [UiOverviewComponent, UiFormComponent, WebComponent, MatWebComponent, DynamicFormWebComponent];
 
 @NgModule({

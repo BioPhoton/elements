@@ -25,7 +25,15 @@
       "demo/*": [
         "dist/demo/*"
       ],
+      "elements": [
+        "projects/elements",
+        "dist/elements"
+      ],
+      "elements/*": [
+        "dist/elements/*"
+      ],
       "helpers": [
+        "projects/helpers",
         "dist/helpers"
       ],
       "helpers/*": [

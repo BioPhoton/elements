@@ -5,9 +5,12 @@
 import {ChangeDetectionStrategy, ViewEncapsulation} from "@angular/core";
 
 export const environment = {
+  name: 'env',
   production: false,
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.Default,
+  zoneLess: false,
+  preCompiled: true
 };
 
 /*

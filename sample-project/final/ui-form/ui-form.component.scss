@@ -1,0 +1,24 @@
+@import "../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
+.ui-form-container {
+  [class*="ng-dynamic-forms"] {
+    display: block;
+  }
+
+  .mat-form-field {
+    width: 30%;
+    margin-right: 3%;
+  }
+
+  [role="group"] > * {
+    width: 30%;
+    margin-right: 3%;
+    display: inline-block;
+
+    .mat-form-field {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+}
+

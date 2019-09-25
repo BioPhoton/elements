@@ -1,14 +1,16 @@
-import {ChangeDetectionStrategy, Component, Input, Output} from '@angular/core';
+import {Component, Input, Output, ViewEncapsulation} from '@angular/core';
 import {Subject} from 'rxjs';
 import {environment} from "../environments/environment";
 
 @Component({
   template: `
-      <h1 id="web-component-h1">WebComponent</h1>
-      <p>@Input() value: {{value | json}}</p>
-      <button (click)="update.next(value)">trigger output</button>
+      <h2>Elements WebComponent</h2>
   `,
-  styles: [ `h1 { color:mediumvioletred }` ],
+  styles: environment.encapsulation === ViewEncapsulation.None ? [] :
+    [`
+      h1 { color: lightcoral; }
+      h2 { color: lightgreen; }
+    `],
   encapsulation: environment.encapsulation,
   changeDetection: environment.changeDetection
 })
@@ -17,6 +19,6 @@ export class WebComponent {
   @Output() update = new Subject();
 
   constructor() {
-    console.log('environment: ', environment);
+
   }
 }

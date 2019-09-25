@@ -1,0 +1,14 @@
+<div class="ui-form-container">
+  <ng-template #form>
+    <form *ngIf="formGroup$ | async as formGroup" [formGroup]="formGroup">
+      <dynamic-material-form
+        [group]="formGroup" [model]="formModel$ | async"
+        (change)="formChange$.next($event)">
+      </dynamic-material-form>
+    </form>
+  </ng-template>
+
+
+  <mat-card *ngIf="(formModel$ | async)?.length === 0; else form">No data!</mat-card>
+
+</div>
