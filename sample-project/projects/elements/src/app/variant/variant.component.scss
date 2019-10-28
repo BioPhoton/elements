@@ -1,0 +1,253 @@
+$consumerWidth: 500px;
+$consumerHeight: 500px;
+$consumerBorderColor: #757575;
+$consumerBackgroundColor: #ffffff;
+
+$componentWidth: 330px;
+$componentHeight: 150px;
+$componentTextColor: #000080;
+$componentBorderColor: #6aa84f;
+$componentBackgroundColor: #d9ead3;
+
+$boxWidth: 120px;
+$boxHeight: 60px;
+$boxTextColor: #000000;
+
+$zoneBorderColor: #3d85c6;
+$zoneBackgroundColor: #cfe2f3;
+
+$encapsulationBorderColor: #a64d79;
+$encapsulationBackgroundColor: #ead1dc;
+
+$utilBorderColor: #e69138;
+$utilBackgroundColor: #fce5cd;
+
+$scriptsBorderColor: #f1c232;
+$scriptsBackgroundColor: #fff2cc;
+
+
+// ======================================
+
+
+.consumer {
+  width: $consumerWidth;
+  height: $consumerHeight;
+  border: 3px solid $consumerBorderColor;
+  background-color: $consumerBackgroundColor;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 60px;
+
+  &:after,
+  &:before {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+  }
+
+  &:after {
+    top: -3px;
+    right: -3px;
+    border-left: 30px solid transparent;
+    border-right: 0px solid transparent;
+    border-top: 30px solid $consumerBackgroundColor;
+    content: ' ';
+  }
+
+  &:before {
+    top: -3px;
+    right: -3px;
+    border-bottom: 30px solid $consumerBorderColor;
+    border-left: 0px solid transparent;
+    border-right: 30px solid transparent;
+    content: ' ';
+  }
+}
+
+.component {
+  height: $componentHeight;
+  width: $componentWidth;
+  border: 4px solid $componentBorderColor;
+  background-color: $componentBackgroundColor;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+}
+
+.wc-sign {
+  width: 100%;
+  line-height: 150px;
+  text-align: center;
+  font-size: 110px;
+  color: $componentTextColor;
+}
+
+.box {
+  border: 3px solid;
+  color: $boxTextColor;
+  height: $boxHeight;
+  width: $boxWidth;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  // Black centered text
+  &:after {
+    font-size: 30px;
+    font-weight: bold;
+    line-height: $boxWidth/2;
+  }
+
+  .arrow {
+    overflow: visible;
+    position: absolute;
+    top: 27px;
+    left: 120px;
+
+    path.arrow-line {
+      stroke-width: 3;
+    }
+
+    path.arrow-end {
+      stroke-width: 2;
+    }
+  }
+}
+
+.variant-name,
+.box .prop-value {
+  line-height: 16px;
+  font-size: 10px;
+  position: absolute;
+  font-weight: bold;
+  color: $consumerBorderColor;
+}
+
+.zone {
+  border-color: $zoneBorderColor;
+  background-color: $zoneBackgroundColor;
+
+  .arrow {
+    path.arrow-line {
+      stroke: $zoneBorderColor;
+    }
+
+    path.arrow-end {
+     // fill: $zoneBorderColor;
+    }
+  }
+
+  &:after {
+    content: 'ZONE';
+  }
+}
+
+.encapsulation {
+  border-color: $encapsulationBorderColor;
+  background-color: $encapsulationBackgroundColor;
+
+  .arrow {
+    path.arrow-line {
+      stroke: $encapsulationBorderColor;
+    }
+
+    path.arrow-end {
+     // fill: $encapsulationBorderColor;
+    }
+  }
+
+  &:after {
+    content: 'CSS';
+  }
+}
+
+.util {
+  border-color: $utilBorderColor;
+  background-color: $utilBackgroundColor;
+
+  &:after {
+    content: 'UTIL';
+  }
+}
+
+.scripts {
+  border-color: $scriptsBorderColor;
+  background-color: $scriptsBackgroundColor;
+
+  &:after {
+    content: 'LIB';
+  }
+}
+
+// Variants Specific===================================================
+
+// Component
+.component.encapsulation-None,
+.component.zone-Injected {
+  border-style: dashed;
+}
+
+// Inner Boxes
+.box {
+  display: none;
+
+  .arrow {
+    display: none;
+  }
+}
+
+// CSS box
+.component.encapsulation-ShadowDom .encapsulation,
+.component.encapsulation-None .encapsulation {
+  display: flex;
+}
+
+.component.encapsulation-ShadowDom .encapsulation {
+  top: $componentHeight/2 - ($boxHeight/2+3);
+  right: -$boxWidth/2;
+}
+
+.component.encapsulation-None .encapsulation {
+  top: -280px;
+  left: -150px;
+  .arrow {
+    display: block;
+    path.arrow-line {
+      d: path("M 0 3 Q 230 0 240 270");
+    }
+  }
+}
+
+// Zone box
+.component.zone-Shipped .zone,
+.component.zone-Injected .zone {
+  display: flex;
+}
+
+.component.zone-Shipped .zone {
+  bottom: -($boxHeight/2+6);
+  right: -$boxWidth/2;
+}
+
+.component.zone-Injected .zone {
+  top: -190px;
+  left: -150px;
+  .arrow {
+    display: block;
+    path.arrow-line {
+      d: path("M 0 3 Q 170 0 170 180");
+    }
+  }
+}
+
+.component.zone-None .util,
+.component.zone-Injected .util {
+  top: -$boxHeight/2-6;
+  right: -$boxWidth/2;
+  display: flex;
+}

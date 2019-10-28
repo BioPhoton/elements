@@ -1,0 +1,11 @@
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+h1 {
+  color:forestgreen;
+}
+
+.mat-form-field-infix .mat-input-element {
+  color: #69f0ae;
+}
+

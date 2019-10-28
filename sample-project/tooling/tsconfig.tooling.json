@@ -1,0 +1,33 @@
+{
+
+  "esModuleInterop": true,
+  "compilerOptions": {
+    "baseUrl": "../",
+    "outDir": "../dist/tooling",
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "noImplicitAny": false,
+    "lib": [
+      "dom",
+      "es2015",
+      "esnext"
+    ],
+    "sourceMap": false,
+    "strict": false,
+    "typeRoots": [
+      "node_module/@types"
+    ]
+  },
+  "files": [
+    "plugins/element-variants.plugin.ts"
+  ],
+  "include": [
+    "*.ts"
+  ],
+  "exclude": [
+    "src/test.ts",
+    "src/**/*.spec.ts"
+  ]
+}
