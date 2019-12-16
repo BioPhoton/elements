@@ -1,0 +1,80 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+               [attr.role]="(vm.isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(vm.isHandset$ | async) ? 'over' : 'side'"
+               [opened]="(vm.isHandset$ | async) === false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <h3 matSubheader>Some Item</h3>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="vm.isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Consumer of Angular Element</span>
+    </mat-toolbar>
+
+    <div class="container">
+      <!-- -->
+      <div class='app-container'>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+          Variants Component
+          </mat-expansion-panel-header>
+          <div class="fx-layout fx-hv-centered">
+            <variant-config *axLazyElement></variant-config>
+          </div>
+        </mat-expansion-panel>
+
+        <web-component *axLazyElement></web-component>
+        <mat-web-component *axLazyElement></mat-web-component>
+        <dynamic-form-component *axLazyElement [formModel]='vm.formSelection$ | async'></dynamic-form-component>
+      </div>
+      <!--  CONTENT
+       <div class='app-container'>
+           isLoading <input type='checkbox'
+                            [ngModel]='false'
+                            (ngModelChange)='vm.isLoading$.next($event)'>
+           <ui-overview
+                   *axLazyElement
+                   [isLoading]='vm.isLoading$ | async'
+                   [schadenUebersicht]='vm.schadenUebersicht'
+                   [schadenEntwurf]='vm.schadenEntwurf'
+                   (selectSchaden)='vm.onSelectSchaden($event)'
+                   (deleteSchaden)='vm.onDeleteSchaden($event)'
+                   (toggleArge)='vm.onToggleArge($event)'
+                   (schadenMelden)='vm.onSchadenMelden($event)'>
+           </ui-overview>
+       </div>
+       <hr>
+       <div class='app-container'>
+           formData:
+           <select [ngModel]='0' (ngModelChange)='vm.formSelection$.next($event)'>
+               <option
+                       *ngFor='let data of vm.formDataOptions; index as idx'
+                       [value]='idx'>
+                   DataSet {{idx}}
+               </option>
+           </select>
+           <ui-form
+                   *axLazyElement
+                   [formData]='vm.formDataOptions[(formSelection$ | async)]'
+                   (formChange)='vm.onFormChange($event)'>
+           </ui-form>
+       </div>
+       -->
+      <div class='app-container version'>
+        no-version number
+      </div>
+
+
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

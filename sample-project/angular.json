@@ -55,8 +55,7 @@
             },
             "controlElement": {
               "styles": [
-                "projects/demo/src/styles.scss",
-                "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
+                "projects/demo/src/styles.scss"
               ]
             },
             "standAloneElement": {
@@ -146,6 +145,103 @@
         }
       }
     },
+    "demo-vanilla": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
+      "root": "projects/demo-vanilla",
+      "sourceRoot": "projects/demo-vanilla/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/demo-vanilla",
+            "index": "projects/demo-vanilla/src/index.html",
+            "main": "projects/demo-vanilla/src/main.ts",
+            "polyfills": "projects/demo-vanilla/src/polyfills.ts",
+            "tsConfig": "projects/demo-vanilla/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "projects/demo-vanilla/src/favicon.ico",
+              "projects/demo-vanilla/src/assets"
+            ],
+            "styles": [
+              "projects/demo-vanilla/src/styles.scss"
+            ],
+            "scripts": [ ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/demo-vanilla/src/environments/environment.ts",
+                  "with": "projects/demo-vanilla/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "sourceMap": false,
+              "extractCss": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "demo-vanilla:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "demo-vanilla:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "demo-vanilla:build"
+          }
+        }
+      }
+    },
     "elements": {
       "projectType": "application",
       "schematics": {
@@ -171,29 +267,9 @@
               "projects/elements/src/styles.scss"
             ],
             "scripts": [],
-            "plugin": "~dist/tooling/tooling/plugins/element-variants.plugin"
+            "plugin": "~dist/tooling/tooling/angular-element-variants.plugin"
           },
           "configurations": {
-            "test": {
-              "outputPath": "dist/elements-test",
-              "fileReplacements": [
-                {
-                  "replace": "projects/elements/src/environments/environment.ts",
-                  "with": "projects/elements/src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "projects/elements/src/variants/variant.ts",
-                  "with": "projects/elements/src/variants/variant.test.ts"
-                }
-              ],
-              "optimization": true,
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
-            },
             "angularStyled": {
               "outputPath": "dist/elements-angular-styled",
               "fileReplacements": [
@@ -234,14 +310,6 @@
               "vendorChunk": false,
               "buildOptimizer": true
             },
-            "serveTest": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/elements/src/variants/variant.ts",
-                  "with": "projects/elements/src/variants/variant.test.ts"
-                }
-              ]
-            },
             "serveAngularStyled": {
               "fileReplacements": [
                 {
@@ -265,18 +333,9 @@
           "options": {
             "browserTarget": "elements:build",
             "port": 4242,
-            "plugin": "~dist/tooling/tooling/plugins/element-variants.plugin"
+            "plugin": "~dist/tooling/tooling/angular-element-variants.plugin"
           },
         "configurations": {
-          "test": {
-            "browserTarget": "elements:build:serveTest",
-            "fileReplacements": [
-              {
-                "replace": "projects/elements/src/variants/variant.ts",
-                "with": "projects/elements/src/variants/variant.test.ts"
-              }
-            ]
-          },
           "angularStyled": {
             "browserTarget": "elements:build:serveAngularStyled",
             "fileReplacements": [

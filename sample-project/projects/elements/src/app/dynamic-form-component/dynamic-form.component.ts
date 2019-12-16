@@ -1,9 +1,10 @@
-import {Component, Input, Output} from '@angular/core';
+import {Component, Input, Output, ViewEncapsulation as VE} from '@angular/core';
 import {Subject} from 'rxjs';
 import {DynamicFormService} from '@ng-dynamic-forms/core';
-import {variant} from '../../variants/variant';
-import {ViewEncapsulation} from "../../../../element-variants/src/interfaces/variant-config.interface";
+import {variant as v} from '../../variants/variant';
+const variant = v;
 
+export const ViewEncapsulation = VE;
 @Component({
   template: `
       <h1 id="dynamic-form-component-h1">DynamicFormWebComponent</h1>

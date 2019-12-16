@@ -3,3 +3,35 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+@import "styes/theme";
+
+.app-container {
+  margin: 0 auto;
+  padding: 30px;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+}
+
+.fx-layout {
+  display: flex;
+}
+
+.fx-h-centered {
+  justify-content: center;
+}
+.fx-v-centered {
+  align-items: center;
+}
+.fx-hv-centered {
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination button {
+  float: right;
+}

@@ -1,22 +1,19 @@
-import {ChangeDetection, CompilationTypes, EsVersions, ViewEncapsulation, ZoneHandling} from 'angular-element-variants';
-
 export const variant = {
-  name: 'angularStyled',
-  // applicationType: 'angular',
+  name: 'angularStandAlone',
 // ViewEncapsulation: 0 = Emulated | 1 = Native | 2 = None | 3 = ShadowDom
-  encapsulation: ViewEncapsulation.ShadowDom,
+  encapsulation: 3,
 // ChangeDetection: 0 = OnPush | 1 = Default
-  changeDetection: ChangeDetection.Default,
+  changeDetection: 1,
 // ZoneHandling: 'None' | 'Injected' | 'Shipped' | 'Scoped'
-  zone: ZoneHandling.Injected,
+  zone: 'None',
 // CompilationTypes: 'preCompiled' | 'unCompiled'
-  compilation: CompilationTypes.preCompiled,
+  compilation: 'preCompiled',
 // runtimeShipped: true | false
-  runtime: false,
+  runtime: true,
 // polyfillsShipped: true | false
   polyfills: false,
 // scriptsShipped: true | false
   scripts: false,
   // EsVersions: 'es5' | 'es2015'
-  esVersion: EsVersions.es2015
+  esVersion: 'es2015'
 };

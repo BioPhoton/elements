@@ -4,11 +4,9 @@
   "compilerOptions": {
     "baseUrl": "../",
     "outDir": "../dist/tooling",
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
-    "moduleResolution": "node",
     "allowJs": true,
-    "noImplicitAny": false,
     "lib": [
       "dom",
       "es2015",
@@ -16,18 +14,12 @@
     ],
     "sourceMap": false,
     "strict": false,
+    "moduleResolution": "node",
     "typeRoots": [
       "node_module/@types"
     ]
   },
   "files": [
-    "plugins/element-variants.plugin.ts"
-  ],
-  "include": [
-    "*.ts"
-  ],
-  "exclude": [
-    "src/test.ts",
-    "src/**/*.spec.ts"
+    "angular-element-variants.plugin.ts"
   ]
 }

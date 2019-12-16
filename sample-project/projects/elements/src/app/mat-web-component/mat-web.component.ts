@@ -1,7 +1,8 @@
 import {Component, Input, Output} from '@angular/core';
 import {Subject} from 'rxjs';
-import {variant} from '../../variants/variant';
-import {ViewEncapsulation} from "../../../../element-variants/src/interfaces/variant-config.interface";
+import {variant as v} from '../../variants/variant';
+import {ViewEncapsulation} from 'angular-element-variants';
+const variant = v;
 
 @Component({
   template: `

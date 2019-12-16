@@ -1,13 +1,32 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {CUSTOM_ELEMENTS_SCHEMA, Injector, NgModule, NgZone} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule, NgZone} from '@angular/core';
 
-import {AppComponent} from './app.component';
+import {AppComponent} from './app-component/app.component';
 import {FormsModule} from '@angular/forms';
 import {HelpersModule} from '../../../helpers/src/lib/helpers.module';
 import {AngularElementsModule} from './angular-elements/angular-elements.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {LazyElModule} from './lazy-el/lazy-el.module';
-import {setUpGlobalCompilerOptions} from 'element-variants';
+import {setupGlobalCompilerOptions} from 'angular-element-variants';
+import {
+  MatButtonModule,
+  MatExpansionModule,
+  MatIconModule,
+  MatListModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from '@angular/material';
+import {LayoutModule} from '@angular/cdk/layout';
+
+const matModules = [
+  BrowserAnimationsModule,
+  LayoutModule,
+  MatToolbarModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatListModule,
+  MatExpansionModule,
+  MatButtonModule
+];
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -21,14 +40,15 @@ import {setUpGlobalCompilerOptions} from 'element-variants';
     FormsModule,
     HelpersModule,
     AngularElementsModule,
-    LazyElModule,
+    matModules
   ],
   exports: [],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(private ngZone: NgZone, private injector: Injector) {
-    setUpGlobalCompilerOptions();
+  constructor(private ngZone: NgZone) {
+    setupGlobalCompilerOptions({ngZone: this.ngZone});
   }
+
 }
